@@ -1,0 +1,118 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Apri file P7M online, visualizza il PDF e scaricalo. Il documento resta nel tuo browser e non viene mai caricato su server esterni."
+    />
+    <title>Apri P7M Online – Visualizza e scarica PDF</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="mark">P7M</span>
+        <h1>Apri P7M online</h1>
+        <p>Visualizza e scarica il PDF contenuto nel tuo file firmato.</p>
+      </header>
+
+      <section class="upload" id="drop-zone">
+        <label for="file">Scegli un file .p7m</label>
+        <span>oppure trascinalo qui</span>
+        <input id="file" type="file" accept=".p7m,application/pkcs7-mime" />
+        <small>Il file resta sul tuo dispositivo. Nessun upload.</small>
+      </section>
+
+      <p id="status" role="status" aria-live="polite"></p>
+
+      <section id="result" hidden>
+        <div class="result-head">
+          <strong id="filename"></strong>
+          <a id="download" download>Scarica PDF</a>
+        </div>
+        <iframe id="preview" title="Anteprima del PDF estratto"></iframe>
+      </section>
+    </main>
+
+    <script>
+      import forge from "node-forge";
+
+      const input = document.querySelector<HTMLInputElement>("#file")!;
+      const dropZone = document.querySelector<HTMLElement>("#drop-zone")!;
+      const status = document.querySelector<HTMLElement>("#status")!;
+      const result = document.querySelector<HTMLElement>("#result")!;
+      const preview = document.querySelector<HTMLIFrameElement>("#preview")!;
+      const download = document.querySelector<HTMLAnchorElement>("#download")!;
+      const filename = document.querySelector<HTMLElement>("#filename")!;
+      let objectUrl = "";
+
+      type AsnNode = { value?: string | AsnNode[] };
+      const readOctets = (node?: AsnNode): string => {
+        if (!node) return "";
+        if (typeof node.value === "string") return node.value;
+        return node.value?.map(readOctets).join("") ?? "";
+      };
+
+      const openP7m = async (file: File) => {
+        result.hidden = true;
+        status.textContent = "Apro il file…";
+
+        try {
+          const bytes = new Uint8Array(await file.arrayBuffer());
+          const der = forge.util.createBuffer(bytes);
+          const message = forge.pkcs7.messageFromAsn1(forge.asn1.fromDer(der));
+          const rawContent = message.content;
+          const content = (
+            typeof rawContent === "string" ? rawContent : rawContent?.getBytes()
+          ) || readOctets(
+            (message as typeof message & { rawCapture?: { content?: AsnNode } })
+              .rawCapture?.content,
+          );
+
+          if (!content) throw new Error("Documento contenuto non trovato");
+
+          const output = Uint8Array.from(
+            content.split("").map((char) => char.charCodeAt(0)),
+          );
+          if (new TextDecoder("ascii").decode(output.slice(0, 5)) !== "%PDF-") {
+            throw new Error("Il file firmato non contiene un PDF");
+          }
+
+          if (objectUrl) URL.revokeObjectURL(objectUrl);
+          objectUrl = URL.createObjectURL(new Blob([output], { type: "application/pdf" }));
+          const outputName = file.name.replace(/\.p7m$/i, "") || "documento.pdf";
+
+          preview.src = objectUrl;
+          download.href = objectUrl;
+          download.download = outputName.toLowerCase().endsWith(".pdf")
+            ? outputName
+            : `${outputName}.pdf`;
+          filename.textContent = download.download;
+          status.textContent = "";
+          result.hidden = false;
+        } catch (error) {
+          status.textContent =
+            error instanceof Error ? error.message : "Impossibile aprire questo file P7M";
+        }
+      };
+
+      input.addEventListener("change", () => input.files?.[0] && openP7m(input.files[0]));
+      dropZone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropZone.classList.add("dragging");
+      });
+      dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragging"));
+      dropZone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        dropZone.classList.remove("dragging");
+        const file = event.dataTransfer?.files[0];
+        if (file) openP7m(file);
+      });
+    </script>
+  </body>
+</html>
