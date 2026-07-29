@@ -91,6 +91,9 @@ Current product state:
 - `README.md` is the operator-facing project guide: keep its privacy,
   extraction-only limitations, commands, architecture and release-only deploy
   notes aligned with the implementation.
+- The GitHub “About” panel points to `p7mreader.eu`, describes local
+  extraction without signature-verification claims and uses focused topics for
+  P7M, PKCS#7, privacy, offline use, Astro and Cloudflare Workers.
 
 ## Git workflow
 
