@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
-    "build": "astro check && astro build",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "types": "wrangler types --include-runtime false",
+    "build": "pnpm test && astro check && astro build",
     "preview": "astro preview"
   },
   "dependencies": {

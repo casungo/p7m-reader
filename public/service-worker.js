@@ -1,11 +1,14 @@
-const cacheName = "apri-p7m-v1";
+const cacheName = "apri-p7m-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(cacheName).then(async (cache) => {
       const page = await fetch("/");
       const html = await page.clone().text();
-      const assets = [...html.matchAll(/(?:src|href)="(\/[^"]+)"/g)].map((match) => match[1]);
+      const assets = [
+        ...html.matchAll(/(?:src|href)="(\/[^"]+)"/g),
+        ...html.matchAll(/new URL\("(\/[^"]+)"/g),
+      ].map((match) => match[1]);
       await cache.put("/", page);
       await cache.addAll([...new Set(["/manifest.webmanifest", "/icon.svg", ...assets])]);
     }),

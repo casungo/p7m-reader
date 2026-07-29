@@ -1,60 +1,13 @@
-import forge from "node-forge";
-
-type AsnNode = { value?: string | AsnNode[] };
-
 export type P7mCertificate = {
-  subject: { getField: (name: string) => { value?: string } | null };
-  validity: { notBefore: Date; notAfter: Date };
+  name: string;
+  notBefore: Date;
+  notAfter: Date;
 };
 
 export type P7mContent = {
   type: string;
   ext: string;
   label: string;
-};
-
-const readOctets = (node?: AsnNode): string => {
-  if (!node) return "";
-  if (typeof node.value === "string") return node.value;
-  return node.value?.map(readOctets).join("") ?? "";
-};
-
-const arrayBufferFrom = (bytes: Uint8Array) => new Uint8Array(bytes).buffer;
-
-const parseMessage = (bytes: Uint8Array) =>
-  forge.pkcs7.messageFromAsn1(
-    forge.asn1.fromDer(forge.util.createBuffer(arrayBufferFrom(bytes))),
-  );
-
-export const unpackP7m = (inputBytes: Uint8Array) => {
-  let bytes = inputBytes;
-  const certificates: P7mCertificate[] = [];
-
-  for (let depth = 0; depth < 5; depth++) {
-    const message = parseMessage(bytes);
-    certificates.push(
-      ...((message as typeof message & { certificates?: P7mCertificate[] })
-        .certificates ?? []),
-    );
-    const rawContent = message.content;
-    const content = (
-      typeof rawContent === "string" ? rawContent : rawContent?.getBytes()
-    ) || readOctets(
-      (message as typeof message & { rawCapture?: { content?: AsnNode } })
-        .rawCapture?.content,
-    );
-
-    if (!content) throw new Error("Documento contenuto non trovato");
-    bytes = Uint8Array.from(content, (char) => char.charCodeAt(0));
-
-    try {
-      parseMessage(bytes);
-    } catch {
-      return { bytes, certificates };
-    }
-  }
-
-  throw new Error("Il file contiene troppe firme annidate");
 };
 
 export const detectP7mContent = (bytes: Uint8Array): P7mContent => {
