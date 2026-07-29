@@ -58,7 +58,7 @@ appending a conversation transcript; keep it concise and actionable.
 
 Current product state:
 
-- Version `1.0.0` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.1.0` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - Production deploys run only when a GitHub Release is published. Pushes are
   for source control; preview unreleased changes locally.
