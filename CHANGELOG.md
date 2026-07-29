@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 - 2026-07-29
+
+- Nuova identità P7M Reader per `p7mreader.eu`, dal nome al marchio.
+- Palette ispirata ai colori europei, con blu `#003399` e giallo `#ffcc00`.
+- Interfaccia ridisegnata attorno al documento, mantenendo privacy e limiti ben visibili.
+- Icone operative uniformate con Lucide.
+
 ## 1.1.0 - 2026-07-29
 
 - Metadati locali per PDF: autore, date, applicazione, produttore e dimensioni pagina.
