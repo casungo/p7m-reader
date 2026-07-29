@@ -1,0 +1,79 @@
+# AGENTS.md
+
+## Product
+
+Apri P7M Online extracts embedded content from `.p7m` files entirely in the
+browser. It previews PDF, XML, PNG, JPEG and GIF files and downloads unknown
+content as binary. It does **not** verify signature integrity, revocation,
+timestamps or legal validity; never claim otherwise.
+
+The UI follows `exceltomarkdown.app`: one viewport-first tool, dominant document
+workspace on the left and compact SEO/help copy in a fixed right sidebar.
+Vertical A4 documents are the primary use case, so certificate information
+belongs beside the preview on desktop, not below it.
+
+## Architecture
+
+- `src/pages/index.astro`: complete page, UI flow and client-side rendering.
+- `src/lib/p7m.ts`: content detection and extracted filenames; keep it free of
+  `node-forge` so the main bundle stays small.
+- `src/lib/unpack-p7m.ts`: PKCS#7 parsing with `node-forge`.
+- `src/workers/p7m.worker.ts`: parsing off the main browser thread.
+- `src/worker.ts`: Cloudflare assets plus anonymous `opened`/`failed` metrics.
+- `public/service-worker.js`: offline cache, including the hashed parser worker.
+- `test/p7m.test.ts`: smallest regression suite using both real sample files.
+
+Files never leave the browser. Metrics contain only `opened` or `failed`, use no
+cookies, and are skipped offline. There is intentionally no file-size limit.
+
+## Commands
+
+```sh
+pnpm test
+pnpm build
+pnpm wrangler dev
+pnpm wrangler deploy
+```
+
+`pnpm build` runs tests and `astro check` before building. For browser QA, test
+both sample P7Ms, an invalid file, reset, mobile layout and offline reopening.
+
+## Working rules
+
+- Preserve the extraction-only product promise and privacy copy.
+- Keep parsing in the Web Worker and avoid importing `unpack-p7m.ts` into the
+  page bundle.
+- Prefer the existing plain Astro/CSS structure; add no UI framework or icon
+  dependency for one-off decoration.
+- Keep the main task usable without reading the SEO sidebar.
+- Do not commit `.playwright-cli`, `output/`, `.wrangler/` or `dist/`.
+- Distinguish commit/push from deploy. Do not deploy unless requested.
+
+## Project memory
+
+Treat this file as the durable project brain. During every work session, update
+it with useful decisions, current behavior, invariants, remaining work and
+concrete ideas discovered while implementing. Replace stale notes instead of
+appending a conversation transcript; keep it concise and actionable.
+
+Current product state:
+
+- Version `1.0.0` is recorded in `package.json` and `CHANGELOG.md`; the header
+  exposes a compact release menu linking to GitHub Releases.
+- File actions live with the open document. Its bar shows container type,
+  extracted content type, original size and signer count.
+- The fixed desktop sidebar must fit without its own scrollbar at 1440×900.
+- The native browser PDF viewer remains intentional. Consider PDF.js only when
+  custom controls become a real requirement; it adds bundle and maintenance.
+- The brand mark is the local document-and-seal SVG in `public/icon.svg`.
+
+## Git workflow
+
+- After a requested change passes its proportional checks, commit and push it
+  to the current branch unless the user explicitly says not to.
+- Split work into small commits by coherent purpose. If one file contains
+  unrelated changes, stage its hunks separately instead of combining them.
+- Keep documentation and project-memory updates with the change they explain,
+  or in a separate documentation commit when they describe several changes.
+- Never treat push as deploy. Cloudflare deployment still requires an explicit
+  request.
