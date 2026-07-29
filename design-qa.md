@@ -3,18 +3,19 @@
 ## Evidence
 
 - Source visual truth: `/home/casungo/.codex/generated_images/019fab4c-9db9-75e2-ac3c-8db0dc8c4582/call_kcKmms3SQZ9Ishqrwd1AgGBJ.png`
-- Implementation capture: `.playwright-cli/page-2026-07-29T01-12-38-154Z.png`
+- Implementation capture: `.playwright-cli/page-2026-07-29T11-53-12-453Z.png`
 - Comparison composite: `/tmp/apri-p7m-qa-comparison-final.png`
 - Viewport: 1440 × 1024 CSS pixels at device scale factor 1
 - Source: 1487 × 1058 pixels, normalized to 1440 × 1024
 - Implementation: 1440 × 1024 pixels
-- State: empty viewer; the loaded-PDF state was checked separately
+- State: loaded PDF with certificate metadata
 
 ## Full-view comparison
 
 The implementation preserves the selected design's primary proportions: 64 px
-utility header, dominant document workspace, fixed 360 px SEO sidebar, flat
-white surfaces, light dividers, compact system typography and blue actions.
+utility header, dominant vertical-document workspace, adjacent 260 px certificate
+panel, fixed 360 px SEO sidebar, flat white surfaces, light dividers, compact
+system typography and blue actions.
 The misleading verification copy in the generated source was intentionally
 replaced with accurate extraction-only language.
 
@@ -26,7 +27,7 @@ replaced with accurate extraction-only language.
 - Colors: neutral white/gray base and blue action/state tokens match.
 - Assets: the real project icon is used; no placeholder or reconstructed logo.
 - Copy: all visible claims match the implemented P7M capabilities.
-- Interactions: file selection, PDF preview, download, certificate disclosure,
+- Interactions: file selection, PDF preview, download, certificate rendering,
   drag target and clear/reset were exercised.
 - Console: no errors after file open and reset.
 
@@ -37,6 +38,8 @@ replaced with accurate extraction-only language.
 - Fix: added the three-part empty metadata strip and full-width disabled download
   row, then rebuilt and recaptured at the same viewport.
 - Post-fix evidence: `/tmp/apri-p7m-qa-comparison-final.png`.
+- Later product refinement: moved metadata beside the PDF to preserve vertical
+  space for the dominant A4 use case; verified with a real four-page sample.
 
 ## Findings
 
