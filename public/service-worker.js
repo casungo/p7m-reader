@@ -1,4 +1,4 @@
-const cacheName = "apri-p7m-v2";
+const cacheName = "apri-p7m-v3";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

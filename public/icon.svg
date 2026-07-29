@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="112" fill="#3157d5"/>
-  <text x="256" y="305" fill="white" font-family="system-ui,sans-serif" font-size="150" font-weight="800" text-anchor="middle">P7M</text>
+  <path fill="#fff" d="M132 84h165l83 83v151a110 110 0 0 0-48-32V186h-58v-58H180v256h94a110 110 0 0 0 15 44H132z"/>
+  <path fill="#b9c8ff" d="M274 84v82h82z"/>
+  <circle cx="357" cy="363" r="79" fill="#fff"/>
+  <path fill="#3157d5" d="m322 363 23 23 48-54 18 17-65 73-42-42z"/>
 </svg>
