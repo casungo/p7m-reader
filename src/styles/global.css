@@ -59,7 +59,7 @@ p {
 }
 
 label,
-a {
+.download {
   padding: 12px 18px;
   border-radius: 9px;
   color: white;
@@ -76,9 +76,15 @@ input {
   opacity: 0;
 }
 
-small {
-  margin-top: 14px;
+small,
+.kind {
   color: #68738a;
+}
+
+.kind {
+  display: block;
+  margin-top: 4px;
+  font-size: .875rem;
 }
 
 #status {
@@ -87,20 +93,71 @@ small {
   color: #b42318;
 }
 
+.result {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #d7dbea;
+  border-radius: 16px;
+  background: white;
+}
+
 .result-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin: 24px 0 12px;
 }
 
-iframe {
+.signature {
+  margin: 18px 0;
+  padding: 12px 0;
+  border-block: 1px solid #e5e7ef;
+}
+
+.signature summary {
+  color: #33415c;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.certificates p {
+  margin: 10px 0;
+  color: #33415c;
+  font-size: .9rem;
+}
+
+iframe,
+.preview img,
+pre {
   width: 100%;
-  height: 70vh;
+  max-height: 70vh;
   border: 1px solid #d7dbea;
   border-radius: 12px;
   background: white;
+}
+
+iframe {
+  height: 70vh;
+}
+
+.preview img {
+  display: block;
+  object-fit: contain;
+}
+
+pre {
+  overflow: auto;
+  margin: 0;
+  padding: 16px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.file-error {
+  padding: 14px;
+  border-radius: 10px;
+  color: #b42318;
+  background: #fff0ee;
 }
 
 @media (max-width: 520px) {
