@@ -4,6 +4,15 @@ import "../styles/global.css";
 const title = "Apri P7M Online – Estrai PDF, XML e immagini";
 const description =
   "Apri ed estrai file P7M direttamente nel browser. Nessun upload, nessun account: il documento resta sul tuo dispositivo.";
+const release = {
+  version: "1.0.0",
+  date: "29 luglio 2026",
+  changes: [
+    "Anteprima di PDF, XML e immagini",
+    "Dati leggibili dei certificati",
+    "Uso offline dopo la prima visita",
+  ],
+};
 const faq = [
   {
     question: "I file vengono caricati su un server?",
@@ -81,30 +90,42 @@ const structuredData = {
         <img src="/icon.svg" alt="" width="42" height="42" />
         <span><strong>Apri P7M Online</strong><small>Visualizza. Scarica. Semplice.</small></span>
       </a>
-      <div class="toolbar">
-        <label class="toolbar-primary" for="file">Apri P7M</label>
-        <button id="clear" type="button" disabled>Cancella</button>
-        <a href="#guida">Guida</a>
-        <a class="github" href="https://github.com/casungo/apri-p7m-online">GitHub</a>
-      </div>
+      <nav class="header-actions" aria-label="Progetto">
+        <details class="release-menu">
+          <summary>v{release.version}<span>Novità</span></summary>
+          <div class="release-card">
+            <strong>Versione {release.version}</strong>
+            <small>{release.date}</small>
+            <ul>{release.changes.map((change) => <li>{change}</li>)}</ul>
+            <a href="https://github.com/casungo/apri-p7m-online/releases">Tutti i rilasci</a>
+          </div>
+        </details>
+        <a class="header-link" href="https://github.com/casungo/apri-p7m-online" aria-label="Guarda il codice sorgente su GitHub">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 2 3 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8-.8c1 0 2 .1 2.9.4 2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.9 5.4-5.6 5.7.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          <span>Codice sorgente</span>
+        </a>
+        <a class="support-link" href="https://donate.casungo.top">Sostieni il progetto</a>
+      </nav>
     </header>
 
     <main class="app-shell">
       <section class="workspace" aria-label="Visualizzatore P7M">
         <input id="file" type="file" accept=".p7m,application/pkcs7-mime" multiple />
         <section class="viewer-empty" id="drop-zone" aria-labelledby="upload-title">
-          <div class="empty-content">
-            <img src="/icon.svg" alt="" width="64" height="64" />
-            <h2 id="upload-title">Nessun documento caricato</h2>
-            <p>Apri un file P7M per visualizzare il documento contenuto.</p>
-            <label for="file">Apri un file P7M</label>
-            <small>Oppure trascina e rilascia qui il file</small>
+          <div class="empty-layout">
+            <div class="empty-content">
+              <img src="/icon.svg" alt="" width="64" height="64" />
+              <h2 id="upload-title">Nessun documento caricato</h2>
+              <p>Apri un file P7M per visualizzare il documento contenuto.</p>
+              <label for="file">Apri un file P7M</label>
+              <small>Oppure trascina e rilascia qui il file</small>
+            </div>
+            <dl class="empty-meta">
+              <div><dt>Stato firma</dt><dd>–</dd></div>
+              <div><dt>Firmatari</dt><dd>–</dd></div>
+              <div><dt>Validità certificato</dt><dd>–</dd></div>
+            </dl>
           </div>
-          <dl class="empty-meta">
-            <div><dt>Stato firma</dt><dd>–</dd></div>
-            <div><dt>Firmatari</dt><dd>–</dd></div>
-            <div><dt>Validità certificato</dt><dd>–</dd></div>
-          </dl>
           <span class="empty-download" aria-disabled="true">Scarica documento</span>
         </section>
         <p id="status" role="status" aria-live="polite"></p>
@@ -120,17 +141,13 @@ const structuredData = {
           </p>
         </article>
 
-        <section>
+        <section class="quick-guide">
           <h2>Come funziona</h2>
           <ol class="guide-steps">
             <li><span>1</span><div><strong>Carica il file P7M</strong><p>Selezionalo o trascinalo dal dispositivo.</p></div></li>
             <li><span>2</span><div><strong>Visualizza il contenuto</strong><p>Apriamo localmente il documento incorporato.</p></div></li>
             <li><span>3</span><div><strong>Scarica il documento</strong><p>Salva il contenuto estratto con un clic.</p></div></li>
           </ol>
-        </section>
-
-        <section>
-          <h2>Perché usarlo</h2>
           <ul class="benefits">
             <li><strong>Privato:</strong> nessun file viene caricato.</li>
             <li><strong>Veloce:</strong> nessun account o attesa.</li>
@@ -159,15 +176,26 @@ const structuredData = {
     <template id="result-template">
       <article class="result">
         <div class="filebar">
-          <div><strong class="filename"></strong><span class="kind"></span></div>
-          <span class="file-size"></span>
+          <div class="file-identity">
+            <strong class="filename"></strong>
+            <span class="file-meta"></span>
+          </div>
+          <div class="file-actions">
+            <label for="file">Cambia file</label>
+            <button class="clear" type="button">Chiudi</button>
+          </div>
         </div>
-        <div class="preview"></div>
-        <details class="signature">
-          <summary>Informazioni sul certificato</summary>
-          <div class="certificates"></div>
-          <small>Dati informativi: non costituiscono verifica della firma.</small>
-        </details>
+        <div class="viewer-layout">
+          <div class="preview"></div>
+          <aside class="document-info" aria-label="Informazioni sulla firma">
+            <dl>
+              <div><dt>Stato firma</dt><dd>Non verificata</dd></div>
+              <div><dt>Firmatari</dt><dd class="signers"></dd></div>
+              <div><dt>Validità certificato</dt><dd class="certificate-validity"></dd></div>
+            </dl>
+            <small>Dati informativi: non costituiscono verifica della firma.</small>
+          </aside>
+        </div>
         <a class="download" download>Scarica documento</a>
       </article>
     </template>
@@ -189,7 +217,6 @@ const structuredData = {
       const dropZone = document.querySelector<HTMLElement>("#drop-zone")!;
       const status = document.querySelector<HTMLElement>("#status")!;
       const results = document.querySelector<HTMLElement>("#results")!;
-      const clear = document.querySelector<HTMLButtonElement>("#clear")!;
       const template = document.querySelector<HTMLTemplateElement>("#result-template")!;
       const objectUrls: string[] = [];
 
@@ -197,10 +224,7 @@ const structuredData = {
         if (navigator.onLine) navigator.sendBeacon?.(`/metrics/${event}`);
       };
 
-      const certificateText = (certificate: P7mCertificate) => {
-        const date = new Intl.DateTimeFormat("it-IT");
-        return `${certificate.name} · certificato ${date.format(new Date(certificate.notBefore))}–${date.format(new Date(certificate.notAfter))}`;
-      };
+      const certificateDate = new Intl.DateTimeFormat("it-IT");
 
       const unpackFile = (file: File) =>
         new Promise<Required<Pick<WorkerReply, "bytes" | "certificates">>>(async (resolve, reject) => {
@@ -238,23 +262,36 @@ const structuredData = {
 
         const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
         card.querySelector<HTMLElement>(".filename")!.textContent = name;
-        card.querySelector<HTMLElement>(".kind")!.textContent = content.label;
-        card.querySelector<HTMLElement>(".file-size")!.textContent =
-          new Intl.NumberFormat("it-IT", { style: "unit", unit: "megabyte", maximumFractionDigits: 1 })
-            .format(file.size / 1024 / 1024);
+        const size = new Intl.NumberFormat("it-IT", {
+          style: "unit",
+          unit: "megabyte",
+          maximumFractionDigits: 1,
+        }).format(file.size / 1024 / 1024);
+        card.querySelector<HTMLElement>(".file-meta")!.textContent =
+          `P7M · ${content.label} · ${size} · ${certificates.length} ${certificates.length === 1 ? "firmatario" : "firmatari"}`;
         const download = card.querySelector<HTMLAnchorElement>(".download")!;
         download.href = url;
         download.download = name;
 
-        const certificateList = card.querySelector<HTMLElement>(".certificates")!;
-        certificateList.replaceChildren(
+        const signers = card.querySelector<HTMLElement>(".signers")!;
+        signers.replaceChildren(
           ...(certificates.length
             ? certificates.map((certificate) => {
                 const item = document.createElement("p");
-                item.textContent = certificateText(certificate);
+                item.textContent = certificate.name;
                 return item;
               })
             : [Object.assign(document.createElement("p"), { textContent: "Nessun certificato leggibile" })]),
+        );
+        const validity = card.querySelector<HTMLElement>(".certificate-validity")!;
+        validity.replaceChildren(
+          ...(certificates.length
+            ? certificates.map((certificate) => {
+                const item = document.createElement("p");
+                item.textContent = `${certificateDate.format(new Date(certificate.notBefore))}–${certificateDate.format(new Date(certificate.notAfter))}`;
+                return item;
+              })
+            : [Object.assign(document.createElement("p"), { textContent: "Non disponibile" })]),
         );
 
         const preview = card.querySelector<HTMLElement>(".preview")!;
@@ -300,7 +337,6 @@ const structuredData = {
         objectUrls.splice(0).forEach(URL.revokeObjectURL);
         results.replaceChildren();
         dropZone.hidden = true;
-        clear.disabled = false;
         status.textContent = `Apro ${files.length} file…`;
 
         let failures = 0;
@@ -328,11 +364,12 @@ const structuredData = {
         results.replaceChildren();
         status.textContent = "";
         dropZone.hidden = false;
-        clear.disabled = true;
       };
 
       input.addEventListener("change", () => input.files && openFiles([...input.files]));
-      clear.addEventListener("click", reset);
+      results.addEventListener("click", (event) => {
+        if ((event.target as Element).closest(".clear")) reset();
+      });
       dropZone.addEventListener("dragover", (event) => {
         event.preventDefault();
         dropZone.classList.add("dragging");
