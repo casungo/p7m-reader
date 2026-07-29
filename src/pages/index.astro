@@ -4,9 +4,9 @@ import packageJson from "../../package.json";
 import { currentRelease } from "../lib/release";
 import "../styles/global.css";
 
-const title = "Apri P7M Online – Estrai PDF, XML e immagini";
+const title = "P7M Reader – Apri ed estrai file P7M online";
 const description =
-  "Apri ed estrai file P7M direttamente nel browser. Nessun upload, nessun account: il documento resta sul tuo dispositivo.";
+  "Apri ed estrai file P7M con P7M Reader. Nessun upload, nessun account: il documento resta sul tuo dispositivo.";
 const release = currentRelease(
   readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8"),
   packageJson.version,
@@ -39,7 +39,8 @@ const structuredData = {
   "@graph": [
     {
       "@type": "WebApplication",
-      name: "Apri P7M Online",
+      name: "P7M Reader",
+      url: "https://p7mreader.eu/",
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Qualsiasi",
       browserRequirements: "JavaScript",
@@ -69,7 +70,7 @@ const structuredData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#2447c6" />
+    <meta name="theme-color" content="#003399" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="it_IT" />
@@ -89,9 +90,9 @@ const structuredData = {
   </head>
   <body>
     <header class="app-header">
-      <a class="brand" href="/" aria-label="Apri P7M Online">
+      <a class="brand" href="/" aria-label="P7M Reader">
         <img src="/icon.svg" alt="" width="42" height="42" />
-        <span><strong>Apri P7M Online</strong><small>Visualizza. Scarica. Semplice.</small></span>
+        <span><strong>P7M Reader</strong><small>p7mreader.eu</small></span>
       </a>
       <nav class="header-actions" aria-label="Progetto">
         <details class="release-menu">
@@ -100,10 +101,10 @@ const structuredData = {
             <strong>Versione {release.version}</strong>
             <small>{release.date}</small>
             <ul>{release.changes.map((change) => <li>{change}</li>)}</ul>
-            <a href="https://github.com/casungo/apri-p7m-online/releases">Tutti i rilasci</a>
+            <a href="https://github.com/casungo/p7m-reader/releases">Tutti i rilasci</a>
           </div>
         </details>
-        <a class="header-link" href="https://github.com/casungo/apri-p7m-online" aria-label="Guarda il codice sorgente su GitHub">
+        <a class="header-link" href="https://github.com/casungo/p7m-reader" aria-label="Guarda il codice sorgente su GitHub">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8.5 5-7 7 7 7 1.5-1.5L4.5 12 10 6.5 8.5 5Zm7 0L14 6.5l5.5 5.5-5.5 5.5 1.5 1.5 7-7-7-7Z"/></svg>
           <span>Codice sorgente</span>
         </a>
@@ -122,9 +123,10 @@ const structuredData = {
           <div class="empty-layout">
             <div class="empty-content">
               <img src="/icon.svg" alt="" width="64" height="64" />
-              <h2 id="upload-title">Nessun documento caricato</h2>
-              <p>Apri un file P7M per visualizzare il documento contenuto.</p>
-              <label for="file">Apri un file P7M</label>
+              <p class="empty-kicker">Lettore locale</p>
+              <h2 id="upload-title">Il documento dentro la firma.</h2>
+              <p>Apri un file P7M per leggere ed estrarre il contenuto, senza caricarlo online.</p>
+              <label for="file">Scegli un file P7M</label>
               <small>Oppure trascina e rilascia qui il file</small>
             </div>
             <dl class="empty-meta">
@@ -140,7 +142,8 @@ const structuredData = {
 
       <aside class="seo-panel" id="guida">
         <article>
-          <h1>Apri file P7M online</h1>
+          <p class="panel-kicker">P7M Reader</p>
+          <h1>Leggi un file P7M. Il documento resta tuo.</h1>
           <p>
             Visualizza il contenuto di un file <strong>.p7m</strong> direttamente
             nel browser. PDF, XML e immagini restano sul tuo dispositivo.
@@ -199,7 +202,7 @@ const structuredData = {
             </dl>
             <p class="legal-note">
               <strong>Attenzione: la firma non viene verificata.</strong>
-              Apri P7M Online estrae il documento e mostra i dati leggibili dei certificati. Non controlla integrità, revoca, marche temporali o validità legale: non usare queste informazioni come prova dell’autenticità del file.
+              P7M Reader estrae il documento e mostra i dati leggibili dei certificati. Non controlla integrità, revoca, marche temporali o validità legale: non usare queste informazioni come prova dell’autenticità del file.
             </p>
           </aside>
         </div>

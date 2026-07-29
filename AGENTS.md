@@ -2,7 +2,7 @@
 
 ## Product
 
-Apri P7M Online extracts embedded content from `.p7m` files entirely in the
+P7M Reader (`p7mreader.eu`) extracts embedded content from `.p7m` files entirely in the
 browser. It previews PDF, XML, PNG, JPEG and GIF files and downloads unknown
 content as binary. It does **not** verify signature integrity, revocation,
 timestamps or legal validity; never claim otherwise.
@@ -58,6 +58,11 @@ appending a conversation transcript; keep it concise and actionable.
 
 Current product state:
 
+- The public product identity is **P7M Reader** at `p7mreader.eu`; use “Apri file
+  P7M online” only as descriptive SEO copy, never as the brand name.
+- The visual system uses EU Reflex Blue (`#003399`), cold paper neutrals and
+  EU Yellow (`#ffcc00`) as a restrained accent;
+  the folded-document `P7M` monogram is the brand mark.
 - Version `1.1.0` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - Production deploys run only when a GitHub Release is published. Pushes are

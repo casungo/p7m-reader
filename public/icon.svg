@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#3157d5"/>
-  <path fill="#fff" d="M132 84h165l83 83v151a110 110 0 0 0-48-32V186h-58v-58H180v256h94a110 110 0 0 0 15 44H132z"/>
-  <path fill="#b9c8ff" d="M274 84v82h82z"/>
-  <circle cx="357" cy="363" r="79" fill="#fff"/>
-  <path fill="#3157d5" d="m322 363 23 23 48-54 18 17-65 73-42-42z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="P7M Reader">
+  <rect width="512" height="512" rx="104" fill="#003399"/>
+  <path fill="#f7f9fa" d="M122 72h188l80 80v288H122z"/>
+  <path fill="#b9c9db" d="M310 72v80h80z"/>
+  <rect x="80" y="238" width="352" height="132" rx="18" fill="#ffcc00"/>
+  <text x="256" y="327" fill="#003399" font-family="ui-monospace, monospace" font-size="104" font-weight="800" text-anchor="middle" letter-spacing="-8">P7M</text>
 </svg>

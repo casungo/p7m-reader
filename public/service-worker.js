@@ -1,4 +1,4 @@
-const cacheName = "apri-p7m-v3";
+const cacheName = "p7m-reader-v4";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
