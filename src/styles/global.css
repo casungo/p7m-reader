@@ -82,7 +82,6 @@ a {
   align-items: center;
   gap: 24px;
   padding-inline: 20px 24px;
-  border-block-start: 4px solid var(--blue);
   border-block-end: 1px solid var(--line);
   background: var(--surface);
 }
@@ -108,7 +107,6 @@ a {
 }
 
 .brand strong {
-  font-family: Georgia, "Times New Roman", serif;
   font-size: 1.35rem;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -273,7 +271,6 @@ input[type="file"] {
   grid-template-rows: minmax(0, 1fr) auto;
   padding: 16px;
   border: 1px solid var(--line);
-  border-block-start: 3px solid var(--blue);
   background: var(--surface);
   text-align: center;
 }
@@ -321,10 +318,9 @@ input[type="file"] {
   text-wrap: pretty;
 }
 
-.empty-content .empty-kicker,
 .panel-kicker {
   margin: 0 0 12px;
-  color: var(--yellow-dark);
+  color: var(--ink);
   font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
   font-size: 0.7rem;
   font-weight: 750;
@@ -340,9 +336,9 @@ input[type="file"] {
   justify-content: center;
   padding: 10px 22px;
   border-radius: 4px;
-  color: white;
-  background: var(--blue);
-  box-shadow: 0 3px 0 var(--blue-dark);
+  color: var(--surface);
+  background: var(--ink);
+  box-shadow: 0 3px 0 var(--muted);
   font-weight: 700;
   text-decoration: none;
   user-select: none;
@@ -353,7 +349,7 @@ input[type="file"] {
 
 .empty-content label:hover,
 .download:hover {
-  background: var(--blue-dark);
+  background: var(--muted);
 }
 
 .empty-content label:active,
@@ -393,7 +389,7 @@ input[type="file"] {
   margin-block-start: 16px;
   place-items: center;
   color: var(--muted);
-  background: var(--blue-soft);
+  background: var(--paper);
   font-size: 0.85rem;
   font-weight: 700;
 }
@@ -611,14 +607,6 @@ pre {
   background: var(--surface);
 }
 
-.seo-panel::before {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: linear-gradient(var(--blue) 0 72%, var(--yellow) 72%);
-  content: "";
-}
-
 .seo-panel article,
 .seo-panel section {
   margin-block-end: 16px;
@@ -636,7 +624,7 @@ pre {
 .seo-panel h2 {
   margin: 0 0 9px;
   font-size: 0.76rem;
-  color: var(--blue-dark);
+  color: var(--ink);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -673,8 +661,8 @@ pre {
   flex: 0 0 24px;
   place-items: center;
   border-radius: 3px;
-  border: 1px solid var(--yellow);
-  color: var(--blue);
+  border: 1px solid var(--line);
+  color: var(--ink);
   background: var(--surface);
   font-size: 0.76rem;
   font-weight: 750;

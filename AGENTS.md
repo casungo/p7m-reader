@@ -60,9 +60,9 @@ Current product state:
 
 - The public product identity is **P7M Reader** at `p7mreader.eu`; use “Apri file
   P7M online” only as descriptive SEO copy, never as the brand name.
-- The visual system uses EU Reflex Blue (`#003399`), cold paper neutrals and
-  EU Yellow (`#ffcc00`) as a restrained accent;
-  the folded-document `P7M` monogram is the brand mark.
+- The visual system uses cold paper neutrals around the folded-document `P7M`
+  monogram; avoid decorative color bars, colored sidebar accents and serif logo
+  text.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
 - Version `1.2.1` is recorded in `package.json` and `CHANGELOG.md`; the header
