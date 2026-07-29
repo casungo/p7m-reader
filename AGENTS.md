@@ -88,6 +88,9 @@ Current product state:
 - Chromium may show the Blob URL UUID inside its native PDF toolbar; the page
   shows the real extracted filename above it and the explicit download saves
   that name. Removing the UUID would require replacing the native viewer.
+- `README.md` is the operator-facing project guide: keep its privacy,
+  extraction-only limitations, commands, architecture and release-only deploy
+  notes aligned with the implementation.
 
 ## Git workflow
 
