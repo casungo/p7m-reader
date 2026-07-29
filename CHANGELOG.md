@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.2 - 2026-07-29
+
+- Interfaccia più neutra: rimossi serif, barre decorative e accenti colorati superflui.
+- Schermata di apertura semplificata per dare più spazio al documento.
+
 ## 1.2.1 - 2026-07-29
 
 - Collega il dominio `p7mreader.eu` al Worker rinominato `p7m-reader`.
