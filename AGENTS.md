@@ -65,8 +65,10 @@ Current product state:
   the folded-document `P7M` monogram is the brand mark.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
-- Version `1.2.0` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.2.1` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
+- `p7mreader.eu` is declared as a custom-domain route in `wrangler.jsonc`; keep
+  that binding with the renamed `p7m-reader` Worker.
 - Production deploys run only when a GitHub Release is published. Pushes are
   for source control; preview unreleased changes locally.
 - File actions live with the open document. Its bar shows container type,

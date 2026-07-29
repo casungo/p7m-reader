@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 - 2026-07-29
+
+- Collega il dominio `p7mreader.eu` al Worker rinominato `p7m-reader`.
+
 ## 1.2.0 - 2026-07-29
 
 - Nuova identità P7M Reader per `p7mreader.eu`, dal nome al marchio.
