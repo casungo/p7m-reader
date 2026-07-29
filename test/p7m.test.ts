@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { detectP7mContent, extractedName } from "../src/lib/p7m.ts";
+import { currentRelease } from "../src/lib/release.ts";
 import { unpackP7m } from "../src/lib/unpack-p7m.ts";
 
 test("estrae i PDF P7M reali", async () => {
@@ -24,4 +25,12 @@ test("riconosce contenuti comuni e conserva i nomi", () => {
 
 test("rifiuta dati che non sono P7M", () => {
   assert.throws(() => unpackP7m(new Uint8Array([1, 2, 3])));
+});
+
+test("legge la release corrente dal changelog", () => {
+  assert.deepEqual(currentRelease("## 1.2.3 - 2026-07-29\n\n- Prima\n- Seconda\n", "1.2.3"), {
+    version: "1.2.3",
+    date: "29 luglio 2026",
+    changes: ["Prima", "Seconda"],
+  });
 });

@@ -59,7 +59,9 @@ appending a conversation transcript; keep it concise and actionable.
 Current product state:
 
 - Version `1.0.0` is recorded in `package.json` and `CHANGELOG.md`; the header
-  exposes a compact release menu linking to GitHub Releases.
+  reads that changelog entry for its compact release menu.
+- Production deploys run only when a GitHub Release is published. Pushes are
+  for source control; preview unreleased changes locally.
 - File actions live with the open document. Its bar shows container type,
   extracted content type, original size and signer count.
 - The fixed desktop sidebar must fit without its own scrollbar at 1440×900.
@@ -75,5 +77,4 @@ Current product state:
   unrelated changes, stage its hunks separately instead of combining them.
 - Keep documentation and project-memory updates with the change they explain,
   or in a separate documentation commit when they describe several changes.
-- Never treat push as deploy. Cloudflare deployment still requires an explicit
-  request.
+- Never treat push as deploy. Production follows published GitHub Releases.

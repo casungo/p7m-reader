@@ -1,18 +1,16 @@
 ---
+import { readFileSync } from "node:fs";
+import packageJson from "../../package.json";
+import { currentRelease } from "../lib/release";
 import "../styles/global.css";
 
 const title = "Apri P7M Online – Estrai PDF, XML e immagini";
 const description =
   "Apri ed estrai file P7M direttamente nel browser. Nessun upload, nessun account: il documento resta sul tuo dispositivo.";
-const release = {
-  version: "1.0.0",
-  date: "29 luglio 2026",
-  changes: [
-    "Anteprima di PDF, XML e immagini",
-    "Dati leggibili dei certificati",
-    "Uso offline dopo la prima visita",
-  ],
-};
+const release = currentRelease(
+  readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8"),
+  packageJson.version,
+);
 const faq = [
   {
     question: "I file vengono caricati su un server?",
