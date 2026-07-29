@@ -173,7 +173,8 @@ a {
 .header-link svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;
+  fill: none;
+  stroke: currentColor;
 }
 
 .theme-toggle {
@@ -187,7 +188,8 @@ a {
   width: 18px;
   height: 18px;
   flex: none;
-  fill: currentColor;
+  fill: none;
+  stroke: currentColor;
 }
 
 .theme-toggle .moon,

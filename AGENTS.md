@@ -63,6 +63,8 @@ Current product state:
 - The visual system uses EU Reflex Blue (`#003399`), cold paper neutrals and
   EU Yellow (`#ffcc00`) as a restrained accent;
   the folded-document `P7M` monogram is the brand mark.
+- UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
+  the product mark, not interface decoration.
 - Version `1.1.0` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - Production deploys run only when a GitHub Release is published. Pushes are
