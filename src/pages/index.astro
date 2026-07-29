@@ -80,6 +80,11 @@ const structuredData = {
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <title>{title}</title>
+    <script is:inline>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("theme") ??
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body>
@@ -90,7 +95,7 @@ const structuredData = {
       </a>
       <nav class="header-actions" aria-label="Progetto">
         <details class="release-menu">
-          <summary>v{release.version}<span>Novità</span></summary>
+          <summary>v{release.version}{release.isNew && <span>Novità</span>}</summary>
           <div class="release-card">
             <strong>Versione {release.version}</strong>
             <small>{release.date}</small>
@@ -99,10 +104,14 @@ const structuredData = {
           </div>
         </details>
         <a class="header-link" href="https://github.com/casungo/apri-p7m-online" aria-label="Guarda il codice sorgente su GitHub">
-          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 .7a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.8.1-.8 1.3.1 2 1.3 2 1.3 1.1 2 3 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.6-1.4-5.6-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8-.8c1 0 2 .1 2.9.4 2.2-1.5 3.2-1.2 3.2-1.2.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.9 5.4-5.6 5.7.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8.5 5-7 7 7 7 1.5-1.5L4.5 12 10 6.5 8.5 5Zm7 0L14 6.5l5.5 5.5-5.5 5.5 1.5 1.5 7-7-7-7Z"/></svg>
           <span>Codice sorgente</span>
         </a>
-        <a class="support-link" href="https://donate.casungo.top">Sostieni il progetto</a>
+        <button class="theme-toggle" type="button" aria-label="Cambia tema" title="Cambia tema">
+          <svg class="sun" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM1 11h3v2H1v-2Zm19 0h3v2h-3v-2ZM4.2 5.6 5.6 4.2l2.1 2.1-1.4 1.4-2.1-2.1Zm12.1 12.1 1.4-1.4 2.1 2.1-1.4 1.4-2.1-2.1ZM16.3 6.3l2.1-2.1 1.4 1.4-2.1 2.1-1.4-1.4ZM4.2 18.4l2.1-2.1 1.4 1.4-2.1 2.1-1.4-1.4ZM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/></svg>
+          <svg class="moon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20.7 15.3A8.5 8.5 0 0 1 8.7 3.3 9 9 0 1 0 20.7 15.3ZM5 12a7 7 0 0 1 1-3.6A10.5 10.5 0 0 0 15.6 18 7 7 0 0 1 5 12Z"/></svg>
+        </button>
+        <a class="support-link" href="https://donate.casungo.top">Dona al creatore</a>
       </nav>
     </header>
 
@@ -119,7 +128,6 @@ const structuredData = {
               <small>Oppure trascina e rilascia qui il file</small>
             </div>
             <dl class="empty-meta">
-              <div><dt>Stato firma</dt><dd>–</dd></div>
               <div><dt>Firmatari</dt><dd>–</dd></div>
               <div><dt>Validità certificato</dt><dd>–</dd></div>
             </dl>
@@ -156,18 +164,15 @@ const structuredData = {
 
         <section>
           <h2>FAQ e limitazioni</h2>
-          {faq.map(({ question, answer }) => (
-            <details>
-              <summary>{question}</summary>
-              <p>{answer}</p>
-            </details>
-          ))}
+          <div class="faq-list">
+            {faq.map(({ question, answer }) => (
+              <div>
+                <h3>{question}</h3>
+                <p>{answer}</p>
+              </div>
+            ))}
+          </div>
         </section>
-
-        <p class="legal-note">
-          <strong>Apre il contenuto, non valida legalmente la firma.</strong>
-          I dati dei certificati sono soltanto informativi.
-        </p>
       </aside>
     </main>
 
@@ -176,25 +181,29 @@ const structuredData = {
         <div class="filebar">
           <div class="file-identity">
             <strong class="filename"></strong>
-            <span class="file-meta"></span>
+            <span class="file-summary"></span>
+            <dl class="file-properties"></dl>
           </div>
           <div class="file-actions">
-            <label for="file">Cambia file</label>
-            <button class="clear" type="button">Chiudi</button>
+            <label for="file"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h10v2H6v12h12v-8h2v10H4V4Zm13-1 4 4-4 4V8c-4.4 0-7.2 1.4-9 4.2C8.6 8 11.4 5.4 17 5V3Z"/></svg>Cambia file</label>
+            <button class="clear" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6.4 5 5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg>Chiudi</button>
           </div>
         </div>
         <div class="viewer-layout">
           <div class="preview"></div>
           <aside class="document-info" aria-label="Informazioni sulla firma">
             <dl>
-              <div><dt>Stato firma</dt><dd>Non verificata</dd></div>
+              <div><dt>Numero di firmatari</dt><dd class="signer-count"></dd></div>
               <div><dt>Firmatari</dt><dd class="signers"></dd></div>
               <div><dt>Validità certificato</dt><dd class="certificate-validity"></dd></div>
             </dl>
-            <small>Dati informativi: non costituiscono verifica della firma.</small>
+            <p class="legal-note">
+              <strong>Attenzione: la firma non viene verificata.</strong>
+              Apri P7M Online estrae il documento e mostra i dati leggibili dei certificati. Non controlla integrità, revoca, marche temporali o validità legale: non usare queste informazioni come prova dell’autenticità del file.
+            </p>
           </aside>
         </div>
-        <a class="download" download>Scarica documento</a>
+        <a class="download" download><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 3h2v10.2l3.6-3.6L18 11l-6 6-6-6 1.4-1.4 3.6 3.6V3ZM4 19h16v2H4v-2Z"/></svg>Scarica documento</a>
       </article>
     </template>
 
@@ -202,6 +211,8 @@ const structuredData = {
       import {
         detectP7mContent,
         extractedName,
+        formatFileSize,
+        readPdfMetadata,
         type P7mCertificate,
       } from "../lib/p7m";
 
@@ -223,6 +234,10 @@ const structuredData = {
       };
 
       const certificateDate = new Intl.DateTimeFormat("it-IT");
+      const documentDate = new Intl.DateTimeFormat("it-IT", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
 
       const unpackFile = (file: File) =>
         new Promise<Required<Pick<WorkerReply, "bytes" | "certificates">>>(async (resolve, reject) => {
@@ -260,16 +275,34 @@ const structuredData = {
 
         const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
         card.querySelector<HTMLElement>(".filename")!.textContent = name;
-        const size = new Intl.NumberFormat("it-IT", {
-          style: "unit",
-          unit: "megabyte",
-          maximumFractionDigits: 1,
-        }).format(file.size / 1024 / 1024);
-        card.querySelector<HTMLElement>(".file-meta")!.textContent =
-          `P7M · ${content.label} · ${size} · ${certificates.length} ${certificates.length === 1 ? "firmatario" : "firmatari"}`;
+        card.querySelector<HTMLElement>(".file-summary")!.textContent =
+          `Contenitore P7M · ${content.label} · ${formatFileSize(file.size)}`;
+        const metadata = content.type === "application/pdf" ? readPdfMetadata(bytes) : {};
+        const properties = [
+          ["Ultima modifica file", file.lastModified ? documentDate.format(file.lastModified) : ""],
+          ["Autore", metadata.author],
+          ["Creato il", metadata.created ? documentDate.format(metadata.created) : ""],
+          ["Modificato il", metadata.modified ? documentDate.format(metadata.modified) : ""],
+          ["Applicazione", metadata.creator],
+          ["Produttore PDF", metadata.producer],
+          ["Dimensioni pagina", metadata.dimensions],
+        ].filter((property): property is [string, string] => Boolean(property[1]));
+        card.querySelector<HTMLElement>(".file-properties")!.replaceChildren(
+          ...properties.map(([label, value]) => {
+            const wrapper = document.createElement("div");
+            const term = document.createElement("dt");
+            const detail = document.createElement("dd");
+            term.textContent = label;
+            detail.textContent = value;
+            wrapper.append(term, detail);
+            return wrapper;
+          }),
+        );
         const download = card.querySelector<HTMLAnchorElement>(".download")!;
         download.href = url;
         download.download = name;
+        card.querySelector<HTMLElement>(".signer-count")!.textContent =
+          `${certificates.length} ${certificates.length === 1 ? "firmatario" : "firmatari"}`;
 
         const signers = card.querySelector<HTMLElement>(".signers")!;
         signers.replaceChildren(
@@ -365,6 +398,11 @@ const structuredData = {
       };
 
       input.addEventListener("change", () => input.files && openFiles([...input.files]));
+      document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+        const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("theme", theme);
+      });
       results.addEventListener("click", (event) => {
         if ((event.target as Element).closest(".clear")) reset();
       });

@@ -68,6 +68,17 @@ Current product state:
 - The native browser PDF viewer remains intentional. Consider PDF.js only when
   custom controls become a real requirement; it adds bundle and maintenance.
 - The brand mark is the local document-and-seal SVG in `public/icon.svg`.
+- The release menu shows “Novità” only for the first 14 days after the changelog
+  date.
+- Dark mode uses the existing CSS tokens and a small persisted theme toggle;
+  DaisyUI is intentionally unnecessary for this plain Astro page.
+- PDF metadata is read locally with the small best-effort parser in `p7m.ts`;
+  unavailable or compressed fields are omitted instead of guessed.
+- Keep the explicit download action: it preserves the extracted filename across
+  browsers even when the native PDF viewer also exposes download controls.
+- Chromium may show the Blob URL UUID inside its native PDF toolbar; the page
+  shows the real extracted filename above it and the explicit download saves
+  that name. Removing the UUID would require replacing the native viewer.
 
 ## Git workflow
 
