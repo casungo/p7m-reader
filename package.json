@@ -1,7 +1,7 @@
 {
   "name": "apri-p7m-online",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
