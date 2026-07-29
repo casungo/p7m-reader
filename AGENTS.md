@@ -84,8 +84,19 @@ Current product state:
 
 - After a requested change passes its proportional checks, commit and push it
   to the current branch unless the user explicitly says not to.
-- Split work into small commits by coherent purpose. If one file contains
-  unrelated changes, stage its hunks separately instead of combining them.
+- For substantial or multi-part requests, split the work into precise commits
+  by coherent purpose instead of one catch-all commit. If one file contains
+  unrelated changes, stage its hunks separately.
 - Keep documentation and project-memory updates with the change they explain,
   or in a separate documentation commit when they describe several changes.
+- After all requested changes are committed and pushed, ask whether to publish
+  a release. Do not publish one without an explicit confirmation such as
+  “fai la release” or “ok, falla”.
+- If the user answers the release question with more changes, treat that as a
+  decision not to release yet: implement, validate, commit and push the new work,
+  then ask again. Continue until the user explicitly confirms the release.
+- When a release is explicitly confirmed, choose the SemVer level autonomously
+  from the shipped changes, update version and changelog, validate, commit and
+  push the release preparation, publish the GitHub Release and verify the
+  release-triggered deployment.
 - Never treat push as deploy. Production follows published GitHub Releases.
