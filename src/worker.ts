@@ -7,7 +7,10 @@ export default {
       if (request.method !== "POST") {
         return new Response(null, { status: 405, headers: { Allow: "POST" } });
       }
-      console.log(JSON.stringify({ event }));
+      if (request.headers.get("Origin") !== url.origin) {
+        return new Response(null, { status: 403 });
+      }
+      env.METRICS.writeDataPoint({ blobs: [event], doubles: [1] });
       return new Response(null, { status: 204 });
     }
 

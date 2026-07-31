@@ -9,6 +9,7 @@ import {
 } from "../src/lib/p7m.ts";
 import { currentRelease } from "../src/lib/release.ts";
 import { unpackP7m } from "../src/lib/unpack-p7m.ts";
+import worker from "../src/worker.ts";
 
 test("estrae i PDF P7M reali", async () => {
   for (const fixture of [
@@ -62,4 +63,27 @@ test("legge la release corrente e limita Novità a 14 giorni", () => {
     "1.2.3",
     new Date("2026-08-01"),
   ).isNew, false);
+});
+
+test("registra solo metriche anonime dalla stessa origine", async () => {
+  type MetricPoint = { blobs?: string[]; doubles?: number[] };
+  const points: MetricPoint[] = [];
+  const env = {
+    METRICS: { writeDataPoint: (point: MetricPoint) => points.push(point) },
+    ASSETS: { fetch: () => new Response("asset") },
+  } as unknown as Env;
+
+  const accepted = await worker.fetch(new Request("https://p7mreader.eu/metrics/opened", {
+    method: "POST",
+    headers: { Origin: "https://p7mreader.eu" },
+  }), env);
+  assert.equal(accepted.status, 204);
+  assert.deepEqual(points, [{ blobs: ["opened"], doubles: [1] }]);
+
+  const rejected = await worker.fetch(new Request("https://p7mreader.eu/metrics/failed", {
+    method: "POST",
+    headers: { Origin: "https://example.com" },
+  }), env);
+  assert.equal(rejected.status, 403);
+  assert.equal(points.length, 1);
 });
