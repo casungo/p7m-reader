@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 - 2026-07-31
+
+- PWA installabile con apertura dei file `.p7m` dall'app su Chromium desktop.
+- Metadati SEO e social completi, sitemap, robots e nuove icone di installazione.
+- Conteggio anonimo dei soli eventi `opened` e `failed`, senza dati sui file.
+- Migliorati focus da tastiera, nuovo tentativo dopo file non validi e layout desktop/mobile.
+- Deploy di release tramite versioni Worker, senza riscrivere il dominio personalizzato.
+
 ## 1.2.2 - 2026-07-29
 
 - Interfaccia più neutra: rimossi serif, barre decorative e accenti colorati superflui.

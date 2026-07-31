@@ -65,7 +65,7 @@ Current product state:
   typography.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
-- Version `1.2.2` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.3.0` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - `p7mreader.eu` is declared as a custom-domain route in `wrangler.jsonc`; keep
   that binding with the renamed `p7m-reader` Worker.
