@@ -66,24 +66,28 @@ test("legge la release corrente e limita Novità a 14 giorni", () => {
 });
 
 test("registra solo metriche anonime dalla stessa origine", async () => {
-  type MetricPoint = { blobs?: string[]; doubles?: number[] };
-  const points: MetricPoint[] = [];
+  const events: unknown[][] = [];
+  const originalInfo = console.info;
+  console.info = (...args) => events.push(args);
   const env = {
-    METRICS: { writeDataPoint: (point: MetricPoint) => points.push(point) },
     ASSETS: { fetch: () => new Response("asset") },
   } as unknown as Env;
 
-  const accepted = await worker.fetch(new Request("https://p7mreader.eu/metrics/opened", {
-    method: "POST",
-    headers: { Origin: "https://p7mreader.eu" },
-  }), env);
-  assert.equal(accepted.status, 204);
-  assert.deepEqual(points, [{ blobs: ["opened"], doubles: [1] }]);
+  try {
+    const accepted = await worker.fetch(new Request("https://p7mreader.eu/metrics/opened", {
+      method: "POST",
+      headers: { Origin: "https://p7mreader.eu" },
+    }), env);
+    assert.equal(accepted.status, 204);
+    assert.deepEqual(events, [["p7m_event", "opened"]]);
 
-  const rejected = await worker.fetch(new Request("https://p7mreader.eu/metrics/failed", {
-    method: "POST",
-    headers: { Origin: "https://example.com" },
-  }), env);
-  assert.equal(rejected.status, 403);
-  assert.equal(points.length, 1);
+    const rejected = await worker.fetch(new Request("https://p7mreader.eu/metrics/failed", {
+      method: "POST",
+      headers: { Origin: "https://example.com" },
+    }), env);
+    assert.equal(rejected.status, 403);
+    assert.equal(events.length, 1);
+  } finally {
+    console.info = originalInfo;
+  }
 });

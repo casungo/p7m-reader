@@ -10,7 +10,7 @@ export default {
       if (request.headers.get("Origin") !== url.origin) {
         return new Response(null, { status: 403 });
       }
-      env.METRICS.writeDataPoint({ blobs: [event], doubles: [1] });
+      console.info("p7m_event", event);
       return new Response(null, { status: 204 });
     }
 

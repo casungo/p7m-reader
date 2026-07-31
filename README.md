@@ -30,9 +30,9 @@ Lettura, estrazione e anteprima avvengono sul dispositivo, in un Web Worker. Il
 contenuto e il nome dei file non vengono inviati al server.
 
 Quando il browser è online, l'app registra soltanto uno dei due eventi anonimi
-`opened` o `failed` in Cloudflare Analytics Engine. Ogni dato contiene il solo
-tipo di evento e il valore `1`: nessun nome, contenuto, formato, dimensione o
-identificatore del file. Non usa cookie e non invia metriche offline.
+`opened` o `failed` nei log del Worker. Ogni riga contiene il solo tipo di
+evento: nessun nome, contenuto, formato, dimensione o identificatore del file.
+Non usa cookie e non invia metriche offline.
 
 ## Formati
 
@@ -77,16 +77,8 @@ pnpm wrangler dev
 
 ## Metriche operative
 
-Il dataset `p7m_reader_events` può essere interrogato dalla SQL API di
-Cloudflare con un token dotato di `Account Analytics Read`:
-
-```sql
-SELECT blob1 AS event, SUM(_sample_interval * double1) AS total
-FROM p7m_reader_events
-WHERE timestamp >= NOW() - INTERVAL '30' DAY
-GROUP BY event
-ORDER BY event;
-```
+Gli eventi sono righe `p7m_event opened` o `p7m_event failed` nei log
+osservabili del Worker.
 
 Le richieste a `/metrics/*` sono accettate soltanto dalla stessa origine.
 

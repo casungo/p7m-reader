@@ -1,10 +1,14 @@
 # Changelog
 
+## 1.3.1 - 2026-07-31
+
+- Registra gli eventi anonimi nei log nativi del Worker, disponibili senza attivare servizi aggiuntivi.
+
 ## 1.3.0 - 2026-07-31
 
 - PWA installabile con apertura dei file `.p7m` dall'app su Chromium desktop.
 - Metadati SEO e social completi, sitemap, robots e nuove icone di installazione.
-- Conteggio anonimo dei soli eventi `opened` e `failed`, senza dati sui file.
+- Eventi anonimi `opened` e `failed`, senza dati sui file.
 - Migliorati focus da tastiera, nuovo tentativo dopo file non validi e layout desktop/mobile.
 - Deploy di release tramite versioni Worker, senza riscrivere il dominio personalizzato.
 

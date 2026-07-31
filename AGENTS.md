@@ -65,7 +65,7 @@ Current product state:
   typography.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
-- Version `1.3.0` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.3.1` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - `p7mreader.eu` is declared as a custom-domain route in `wrangler.jsonc`; keep
   that binding with the renamed `p7m-reader` Worker.
@@ -103,9 +103,9 @@ Current product state:
 - The manifest uses raster install icons plus a maskable icon. Chromium desktop
   can pass `.p7m` files to the installed PWA through `file_handlers` and
   `launchQueue`; other browsers keep the normal picker and drag-and-drop flow.
-- Anonymous `opened` and `failed` events are also counted in the
-  `p7m_reader_events` Analytics Engine dataset. Keep the data point limited to
-  the event and count; do not add file metadata, identifiers or request
+- Anonymous `opened` and `failed` events use native Worker observability logs
+  because Analytics Engine is not enabled on the account. Keep each line
+  limited to the event; do not add file metadata, identifiers or request
   location.
 - Keep the Italian root as the only locale until product-specific Search
   Console queries justify another fully translated static route. Do not copy

@@ -15,12 +15,6 @@
     "binding": "ASSETS",
     "run_worker_first": ["/metrics/*"]
   },
-  "analytics_engine_datasets": [
-    {
-      "binding": "METRICS",
-      "dataset": "p7m_reader_events"
-    }
-  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
