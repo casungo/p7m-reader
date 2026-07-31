@@ -8,6 +8,8 @@ import "../styles/global.css";
 const title = "P7M Reader – Apri ed estrai file P7M online";
 const description =
   "Apri ed estrai file P7M con P7M Reader. Nessun upload, nessun account: il documento resta sul tuo dispositivo.";
+const canonical = new URL("/", Astro.site);
+const socialImage = new URL("/og-image.png", Astro.site);
 const release = currentRelease(
   readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8"),
   packageJson.version,
@@ -71,16 +73,28 @@ const structuredData = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#003399" />
+    <meta name="theme-color" content="#f2f5f7" />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="P7M Reader" />
     <meta property="og:locale" content="it_IT" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta name="twitter:card" content="summary" />
-    <link rel="canonical" href="/" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="P7M Reader, lettore locale di file P7M" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="it" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <script is:inline>
       document.documentElement.dataset.theme =
@@ -119,7 +133,13 @@ const structuredData = {
 
     <main class="app-shell">
       <section class="workspace" aria-label="Visualizzatore P7M">
-        <input id="file" type="file" accept=".p7m,application/pkcs7-mime" multiple />
+        <input
+          id="file"
+          type="file"
+          accept=".p7m,application/pkcs7-mime"
+          aria-label="Scegli uno o più file P7M"
+          multiple
+        />
         <section class="viewer-empty" id="drop-zone" aria-label="Apri un file P7M">
           <div class="empty-layout">
             <div class="empty-content">
@@ -389,6 +409,10 @@ const structuredData = {
         status.textContent = failures
           ? `${failures} ${failures === 1 ? "file non aperto" : "file non aperti"}`
           : "";
+        if (failures === files.length) {
+          input.value = "";
+          dropZone.hidden = false;
+        }
       };
 
       const reset = () => {
@@ -417,6 +441,17 @@ const structuredData = {
         event.preventDefault();
         dropZone.classList.remove("dragging");
         if (event.dataTransfer?.files.length) openFiles([...event.dataTransfer.files]);
+      });
+
+      type LaunchQueueWindow = Window & {
+        launchQueue?: {
+          setConsumer(consumer: (params: {
+            files: Array<{ getFile(): Promise<File> }>;
+          }) => void): void;
+        };
+      };
+      (window as LaunchQueueWindow).launchQueue?.setConsumer(async ({ files }) => {
+        if (files.length) await openFiles(await Promise.all(files.map((handle) => handle.getFile())));
       });
 
       if ("serviceWorker" in navigator) {

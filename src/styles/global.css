@@ -133,7 +133,7 @@ a {
 .theme-toggle,
 .release-menu > summary {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 7px;
@@ -176,7 +176,7 @@ a {
 }
 
 .theme-toggle {
-  width: 40px;
+  width: 44px;
   padding: 0;
 }
 
@@ -611,6 +611,10 @@ pre {
   margin-block-end: 16px;
 }
 
+.seo-panel > :last-child {
+  margin-block-end: 0;
+}
+
 .seo-panel h1 {
   margin: 0 0 8px;
   font-size: 1.7rem;
@@ -733,6 +737,11 @@ pre {
   outline-offset: 2px;
 }
 
+.workspace:has(#file:focus-visible) label[for="file"] {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
 @media (max-width: 1050px) {
   .app-shell {
     display: block;
@@ -846,6 +855,7 @@ pre {
   .file-actions > * {
     flex: 1;
     justify-content: center;
+    min-height: 44px;
   }
 
   .seo-panel {

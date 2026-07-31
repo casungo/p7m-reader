@@ -1,4 +1,4 @@
-const cacheName = "p7m-reader-v4";
+const cacheName = "p7m-reader-v5";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -10,7 +10,14 @@ self.addEventListener("install", (event) => {
         ...html.matchAll(/new URL\("(\/[^"]+)"/g),
       ].map((match) => match[1]);
       await cache.put("/", page);
-      await cache.addAll([...new Set(["/manifest.webmanifest", "/icon.svg", ...assets])]);
+      await cache.addAll([...new Set([
+        "/manifest.webmanifest",
+        "/icon.svg",
+        "/icon-192.png",
+        "/icon-512.png",
+        "/icon-maskable-512.png",
+        ...assets,
+      ])]);
     }),
   );
   self.skipWaiting();
