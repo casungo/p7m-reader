@@ -72,7 +72,7 @@ const structuredData = {
     <link rel="canonical" href={canonical} />
     {locales.map((alternate) => <link rel="alternate" hreflang={alternate.code} href={new URL(alternate.path, Astro.site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" href={`/manifest.webmanifest?v=${packageJson.version}`} />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>

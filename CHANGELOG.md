@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 - 2026-07-31
+
+- Versiona l'URL del manifest PWA per evitare che la cache Cloudflare mantenga la configurazione precedente dopo una release.
+
 ## 1.4.0 - 2026-07-31
 
 - Interfaccia, metadati SEO, FAQ e route statiche disponibili nelle stesse 14 lingue di Excel to Markdown.

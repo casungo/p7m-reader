@@ -1,4 +1,4 @@
-const cacheName = "p7m-reader-v7";
+const cacheName = "p7m-reader-v8";
 const sharedFileKey = "/__shared-p7m";
 const localePages = [
   "/de/p7m-datei-oeffnen/",
