@@ -24,8 +24,13 @@
   preview on desktop.
 - The mobile header, upload action and metadata stack without horizontal
   overflow.
-- Focus styles, dark mode, reduced motion and the extraction-only legal warning
-  remain intact.
+- The hidden native file input exposes a visible focus ring on its upload
+  label, and primary mobile hit areas are at least 44 × 44 pixels.
+- An invalid file keeps the picker visible so the user can retry without
+  reloading.
+- Focus styles, dark mode, reduced motion, offline reopening and the
+  extraction-only legal warning remain intact.
+- Both real P7M samples open together with no browser console errors.
 - `pnpm test`, `astro check` and `astro build` pass.
 
 final result: passed

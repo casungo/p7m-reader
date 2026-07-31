@@ -94,6 +94,22 @@ Current product state:
 - The GitHub “About” panel points to `p7mreader.eu`, describes local
   extraction without signature-verification claims and uses focused topics for
   P7M, PKCS#7, privacy, offline use, Astro and Cloudflare Workers.
+- Release CI uploads and promotes a tagged Worker Version instead of running
+  `wrangler deploy`; this preserves the existing custom-domain trigger and does
+  not require route-write permission on every release.
+- SEO basics are static and dependency-free: Astro has the production `site`,
+  while `robots.txt`, the one-URL sitemap and the editable `og-image.svg`
+  source live in `public/`.
+- The manifest uses raster install icons plus a maskable icon. Chromium desktop
+  can pass `.p7m` files to the installed PWA through `file_handlers` and
+  `launchQueue`; other browsers keep the normal picker and drag-and-drop flow.
+- Anonymous `opened` and `failed` events are also counted in the
+  `p7m_reader_events` Analytics Engine dataset. Keep the data point limited to
+  the event and count; do not add file metadata, identifiers or request
+  location.
+- Keep the Italian root as the only locale until product-specific Search
+  Console queries justify another fully translated static route. Do not copy
+  the broad Excel-to-Markdown locale set without P7M demand.
 
 ## Git workflow
 

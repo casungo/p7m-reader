@@ -17,7 +17,9 @@ un server e non serve creare un account.
 - lettura best-effort dei metadati PDF non compressi;
 - apertura di più file nella stessa sessione;
 - tema chiaro e scuro;
-- riapertura offline dopo la prima visita.
+- riapertura offline dopo la prima visita;
+- apertura dei `.p7m` dal file manager quando la PWA è installata in un browser
+  Chromium desktop che supporta File Handling.
 
 Non esiste un limite di dimensione imposto dall'applicazione. La dimensione
 gestibile dipende dalla memoria disponibile nel browser.
@@ -28,7 +30,9 @@ Lettura, estrazione e anteprima avvengono sul dispositivo, in un Web Worker. Il
 contenuto e il nome dei file non vengono inviati al server.
 
 Quando il browser è online, l'app registra soltanto uno dei due eventi anonimi
-`opened` o `failed`. Non usa cookie e non invia metriche offline.
+`opened` o `failed` in Cloudflare Analytics Engine. Ogni dato contiene il solo
+tipo di evento e il valore `1`: nessun nome, contenuto, formato, dimensione o
+identificatore del file. Non usa cookie e non invia metriche offline.
 
 ## Formati
 
@@ -71,6 +75,21 @@ pnpm wrangler dev
   anonime;
 - `test/p7m.test.ts` verifica l'estrazione usando i due file in `samples/`.
 
+## Metriche operative
+
+Il dataset `p7m_reader_events` può essere interrogato dalla SQL API di
+Cloudflare con un token dotato di `Account Analytics Read`:
+
+```sql
+SELECT blob1 AS event, SUM(_sample_interval * double1) AS total
+FROM p7m_reader_events
+WHERE timestamp >= NOW() - INTERVAL '30' DAY
+GROUP BY event
+ORDER BY event;
+```
+
+Le richieste a `/metrics/*` sono accettate soltanto dalla stessa origine.
+
 ## Verifica manuale
 
 Dopo `pnpm build`, controllare:
@@ -85,9 +104,10 @@ Dopo `pnpm build`, controllare:
 
 La produzione gira su Cloudflare Workers all'indirizzo
 [p7mreader.eu](https://p7mreader.eu). I push aggiornano soltanto il codice
-sorgente: il workflow `.github/workflows/release.yml` esegue test, build e
-deploy esclusivamente quando viene pubblicata una GitHub Release il cui tag
-corrisponde alla versione in `package.json`.
+sorgente: il workflow `.github/workflows/release.yml` esegue test e build,
+carica una Worker Version e la porta al 100% esclusivamente quando viene
+pubblicata una GitHub Release il cui tag corrisponde alla versione in
+`package.json`. Le route Cloudflare restano gestite separatamente e non vengono
+riscritte durante ogni release.
 
 Le modifiche pubblicate sono documentate in [CHANGELOG.md](CHANGELOG.md).
-
