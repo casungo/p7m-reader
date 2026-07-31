@@ -14,7 +14,9 @@ belongs beside the preview on desktop, not below it.
 
 ## Architecture
 
-- `src/pages/index.astro`: complete page, UI flow and client-side rendering.
+- `src/components/ReaderPage.astro`: complete page, UI flow and client rendering.
+- `src/i18n.ts`: locale routes and translated copy.
+- `src/pages/index.astro` and `src/pages/[lang]/[slug].astro`: static routes.
 - `src/lib/p7m.ts`: content detection and extracted filenames; keep it free of
   `node-forge` so the main bundle stays small.
 - `src/lib/unpack-p7m.ts`: PKCS#7 parsing with `node-forge`.
@@ -107,12 +109,17 @@ Current product state:
   because Analytics Engine is not enabled on the account. Keep each line
   limited to the event; do not add file metadata, identifiers or request
   location.
-- Keep the Italian root as the only locale until product-specific Search
-  Console queries justify another fully translated static route. Do not copy
-  the broad Excel-to-Markdown locale set without P7M demand.
+- The English root and 13 translated static routes match Excel-to-Markdown's
+  language set. Keep `src/i18n.ts`, reciprocal hreflang links, the generated
+  sitemap and the language menu in sync.
 - The empty state includes a bundled public P7M demo so visitors can exercise
   the real parser immediately; keep it on the same local extraction path as
   user-selected files.
+- The PWA caches every locale shell and accepts shared `.p7m` files through a
+  local service-worker handoff. Never route shared file bytes through the
+  Worker or another server.
+- Astro 7 is intentional. TypeScript stays on 6 until `astro check` supports
+  TypeScript 7's compiler API.
 
 ## Git workflow
 

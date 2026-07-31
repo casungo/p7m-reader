@@ -1,0 +1,476 @@
+---
+import { CodeXml, Download, FileUp, Moon, Sun, X } from "@lucide/astro";
+import changelog from "../../CHANGELOG.md?raw";
+import packageJson from "../../package.json";
+import { locales, type Locale } from "../i18n";
+import { currentRelease } from "../lib/release";
+import "../styles/global.css";
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = locale.copy;
+const title = copy.metaTitle;
+const description = copy.metaDescription;
+const canonical = new URL(locale.path, Astro.site);
+const socialImage = new URL("/og-image.png", Astro.site);
+const release = currentRelease(
+  changelog,
+  packageJson.version,
+  new Date(),
+  locale.code,
+);
+const faq = copy.faqs;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "P7M Reader",
+      url: "https://p7mreader.eu/",
+      applicationCategory: "UtilitiesApplication",
+      operatingSystem: "Any",
+      browserRequirements: "JavaScript",
+      description,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+      featureList: copy.benefits.slice(0, 3),
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faq.map(({ question, answer }) => ({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={locale.code}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f2f5f7" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="P7M Reader" />
+    <meta property="og:locale" content={locale.ogLocale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <link rel="canonical" href={canonical} />
+    {locales.map((alternate) => <link rel="alternate" hreflang={alternate.code} href={new URL(alternate.path, Astro.site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("theme") ??
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="/">
+        <img src="/icon.svg" alt="" width="42" height="42" />
+        <span><strong>P7M Reader</strong><small>p7mreader.eu</small></span>
+      </a>
+      <nav class="header-actions" aria-label="Project">
+        <details class="language-menu">
+          <summary>{locale.code.toUpperCase()}</summary>
+          <div>
+            {locales.map((item) => (
+              <a href={item.path} lang={item.code} aria-current={item.code === locale.code ? "page" : undefined}>
+                {item.name}
+              </a>
+            ))}
+          </div>
+        </details>
+        <details class="release-menu">
+          <summary>v{release.version}{release.isNew && <span>{copy.newLabel}</span>}</summary>
+          <div class="release-card">
+            <strong>{copy.versionLabel} {release.version}</strong>
+            <small>{release.date}</small>
+            {locale.code === "it" && <ul>{release.changes.map((change) => <li>{change}</li>)}</ul>}
+            <a href="https://github.com/casungo/p7m-reader/releases">{copy.allReleases}</a>
+          </div>
+        </details>
+        <a class="header-link" href="https://github.com/casungo/p7m-reader" aria-label={copy.source}>
+          <CodeXml aria-hidden="true" />
+          <span>{copy.source}</span>
+        </a>
+        <button class="theme-toggle" type="button" aria-label={copy.theme} title={copy.theme}>
+          <Sun class="sun" aria-hidden="true" />
+          <Moon class="moon" aria-hidden="true" />
+        </button>
+        <a class="support-link" href="https://donate.casungo.top">{copy.donate}</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <section class="workspace" aria-label={copy.viewer}>
+        <input
+          id="file"
+          type="file"
+          accept=".p7m,application/pkcs7-mime"
+          aria-label={copy.choose}
+          multiple
+        />
+        <section class="viewer-empty" id="drop-zone" aria-label={copy.choose}>
+          <div class="empty-layout">
+            <div class="empty-content">
+              <img src="/icon.svg" alt="" width="64" height="64" />
+              <p>{copy.metaDescription}</p>
+              <label for="file">{copy.choose}</label>
+              <button class="demo-file" type="button">{copy.demo}</button>
+              <small>{copy.drop}</small>
+            </div>
+            <dl class="empty-meta">
+              <div><dt>{copy.signerNamesLabel}</dt><dd>–</dd></div>
+              <div><dt>{copy.validityLabel}</dt><dd>–</dd></div>
+            </dl>
+          </div>
+          <span class="empty-download" aria-disabled="true">{copy.download}</span>
+        </section>
+        <p id="status" role="status" aria-live="polite"></p>
+        <section id="results" aria-label={copy.results}></section>
+      </section>
+
+      <aside class="seo-panel" id="guida">
+        <article>
+          <p class="panel-kicker">P7M Reader</p>
+          <h1>{copy.heroTitle}</h1>
+          <p>{copy.intro}</p>
+        </article>
+
+        <section class="quick-guide">
+          <h2>{copy.how}</h2>
+          <ol class="guide-steps">
+            {copy.steps.map((step, index) => {
+              const [heading, text] = step.split("|");
+              return <li><span>{index + 1}</span><div><strong>{heading}</strong><p>{text}</p></div></li>;
+            })}
+          </ol>
+          <ul class="benefits">
+            {copy.benefits.map((benefit) => <li>{benefit}</li>)}
+          </ul>
+        </section>
+
+        <section>
+          <h2>{copy.faqTitle}</h2>
+          <div class="faq-list">
+            {faq.map(({ question, answer }) => (
+              <div>
+                <h3>{question}</h3>
+                <p>{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <template id="result-template">
+      <article class="result">
+        <div class="filebar">
+          <div class="file-identity">
+            <strong class="filename"></strong>
+            <span class="file-summary"></span>
+            <dl class="file-properties"></dl>
+          </div>
+          <div class="file-actions">
+            <label for="file"><FileUp aria-hidden="true" />{copy.change}</label>
+            <button class="clear" type="button"><X aria-hidden="true" />{copy.close}</button>
+          </div>
+        </div>
+        <div class="viewer-layout">
+          <div class="preview"></div>
+          <aside class="document-info" aria-label={copy.signatureInfo}>
+            <dl>
+              <div><dt>{copy.signerCountLabel}</dt><dd class="signer-count"></dd></div>
+              <div><dt>{copy.signerNamesLabel}</dt><dd class="signers"></dd></div>
+              <div><dt>{copy.validityLabel}</dt><dd class="certificate-validity"></dd></div>
+            </dl>
+            <p class="legal-note">
+              <strong>{copy.warningTitle}</strong>
+              {copy.warning}
+            </p>
+          </aside>
+        </div>
+        <a class="download" download><Download aria-hidden="true" />{copy.download}</a>
+      </article>
+    </template>
+
+    <script is:inline id="page-copy" type="application/json" set:html={JSON.stringify({ copy, locale: locale.code })} />
+    <script>
+      import {
+        detectP7mContent,
+        extractedName,
+        formatFileSize,
+        readPdfMetadata,
+        type P7mCertificate,
+      } from "../lib/p7m";
+
+      type WorkerReply = {
+        bytes?: ArrayBuffer;
+        certificates?: P7mCertificate[];
+        error?: string;
+      };
+
+      const page = JSON.parse(document.querySelector("#page-copy")!.textContent!) as {
+        copy: import("../i18n").Copy;
+        locale: string;
+      };
+      const copy = page.copy;
+      const input = document.querySelector<HTMLInputElement>("#file")!;
+      const dropZone = document.querySelector<HTMLElement>("#drop-zone")!;
+      const status = document.querySelector<HTMLElement>("#status")!;
+      const results = document.querySelector<HTMLElement>("#results")!;
+      const template = document.querySelector<HTMLTemplateElement>("#result-template")!;
+      const demoButton = document.querySelector<HTMLButtonElement>(".demo-file")!;
+      const objectUrls: string[] = [];
+
+      const track = (event: "opened" | "failed") => {
+        if (navigator.onLine) navigator.sendBeacon?.(`/metrics/${event}`);
+      };
+
+      const certificateDate = new Intl.DateTimeFormat(page.locale);
+      const documentDate = new Intl.DateTimeFormat(page.locale, {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
+
+      const unpackFile = (file: File) =>
+        new Promise<Required<Pick<WorkerReply, "bytes" | "certificates">>>(async (resolve, reject) => {
+          const worker = new Worker(
+            new URL("../workers/p7m.worker.ts", import.meta.url),
+            { type: "module" },
+          );
+          worker.addEventListener("message", ({ data }: MessageEvent<WorkerReply>) => {
+            worker.terminate();
+            if (data.error || !data.bytes || !data.certificates) {
+              reject(new Error(data.error || "File P7M non leggibile"));
+            } else {
+              resolve({ bytes: data.bytes, certificates: data.certificates });
+            }
+          });
+          worker.addEventListener("error", () => {
+            worker.terminate();
+            reject(new Error("Impossibile elaborare il file"));
+          });
+          const bytes = await file.arrayBuffer();
+          worker.postMessage(bytes, [bytes]);
+        });
+
+      const renderFile = async (file: File) => {
+        if (!file.name.toLowerCase().endsWith(".p7m")) {
+          throw new Error(copy.extension);
+        }
+        if (!file.size) throw new Error(copy.empty);
+        const { bytes: buffer, certificates } = await unpackFile(file);
+        const bytes = new Uint8Array(buffer);
+        const content = detectP7mContent(bytes);
+        const name = extractedName(file.name, content.ext);
+        const url = URL.createObjectURL(new Blob([buffer], { type: content.type }));
+        objectUrls.push(url);
+
+        const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+        card.querySelector<HTMLElement>(".filename")!.textContent = name;
+        card.querySelector<HTMLElement>(".file-summary")!.textContent =
+          `${copy.container} · ${content.ext.toUpperCase()} · ${formatFileSize(file.size, page.locale)}`;
+        const metadata = content.type === "application/pdf" ? readPdfMetadata(bytes) : {};
+        const properties = [
+          [copy.properties[0], file.lastModified ? documentDate.format(file.lastModified) : ""],
+          [copy.properties[1], metadata.author],
+          [copy.properties[2], metadata.created ? documentDate.format(metadata.created) : ""],
+          [copy.properties[3], metadata.modified ? documentDate.format(metadata.modified) : ""],
+          [copy.properties[4], metadata.creator],
+          [copy.properties[5], metadata.producer],
+          [copy.properties[6], metadata.dimensions],
+        ].filter((property): property is [string, string] => Boolean(property[1]));
+        card.querySelector<HTMLElement>(".file-properties")!.replaceChildren(
+          ...properties.map(([label, value]) => {
+            const wrapper = document.createElement("div");
+            const term = document.createElement("dt");
+            const detail = document.createElement("dd");
+            term.textContent = label;
+            detail.textContent = value;
+            wrapper.append(term, detail);
+            return wrapper;
+          }),
+        );
+        const download = card.querySelector<HTMLAnchorElement>(".download")!;
+        download.href = url;
+        download.download = name;
+        card.querySelector<HTMLElement>(".signer-count")!.textContent =
+          `${certificates.length} ${certificates.length === 1 ? copy.signer : copy.signers}`;
+
+        const signers = card.querySelector<HTMLElement>(".signers")!;
+        signers.replaceChildren(
+          ...(certificates.length
+            ? certificates.map((certificate) => {
+                const item = document.createElement("p");
+                item.textContent = certificate.name;
+                return item;
+              })
+            : [Object.assign(document.createElement("p"), { textContent: copy.noCertificate })]),
+        );
+        const validity = card.querySelector<HTMLElement>(".certificate-validity")!;
+        validity.replaceChildren(
+          ...(certificates.length
+            ? certificates.map((certificate) => {
+                const item = document.createElement("p");
+                item.textContent = `${certificateDate.format(new Date(certificate.notBefore))}–${certificateDate.format(new Date(certificate.notAfter))}`;
+                return item;
+              })
+            : [Object.assign(document.createElement("p"), { textContent: copy.unavailable })]),
+        );
+
+        const preview = card.querySelector<HTMLElement>(".preview")!;
+        if (content.type === "application/pdf") {
+          const frame = document.createElement("iframe");
+          frame.src = url;
+          frame.title = `Anteprima di ${name}`;
+          preview.append(frame);
+        } else if (content.type.startsWith("image/")) {
+          const image = document.createElement("img");
+          image.src = url;
+          image.alt = `Anteprima di ${name}`;
+          preview.append(image);
+        } else if (content.type === "application/xml") {
+          const code = document.createElement("pre");
+          code.textContent = new TextDecoder().decode(bytes);
+          preview.append(code);
+        } else {
+          const note = document.createElement("p");
+          note.className = "no-preview";
+          note.textContent = copy.noPreview;
+          preview.append(note);
+        }
+
+        results.append(card);
+        track("opened");
+      };
+
+      const friendlyError = (error: unknown) => {
+        const message = error instanceof Error ? error.message : "";
+        if (message === copy.extension || message === copy.empty || message.includes("troppe firme")) return message;
+        if (message.includes("contenuto non trovato")) {
+          return copy.noDocument;
+        }
+        return copy.invalid;
+      };
+
+      const openFiles = async (files: File[]) => {
+        objectUrls.splice(0).forEach(URL.revokeObjectURL);
+        results.replaceChildren();
+        dropZone.hidden = true;
+        status.textContent = `${copy.opening} ${files.length} file…`;
+
+        let failures = 0;
+        for (const file of files) {
+          try {
+            await renderFile(file);
+          } catch (error) {
+            failures++;
+            track("failed");
+            const item = document.createElement("p");
+            item.className = "file-error";
+            item.textContent = `${file.name}: ${friendlyError(error)}`;
+            results.append(item);
+          }
+        }
+
+        status.textContent = failures
+          ? `${failures} ${copy.failed}`
+          : "";
+        if (failures === files.length) {
+          input.value = "";
+          dropZone.hidden = false;
+        }
+      };
+
+      const reset = () => {
+        objectUrls.splice(0).forEach(URL.revokeObjectURL);
+        input.value = "";
+        results.replaceChildren();
+        status.textContent = "";
+        dropZone.hidden = false;
+      };
+
+      input.addEventListener("change", () => input.files && openFiles([...input.files]));
+      demoButton.addEventListener("click", async () => {
+        try {
+          const response = await fetch(
+            new URL("../../samples/comune-ceva.pdf.p7m", import.meta.url),
+          );
+          if (!response.ok) throw new Error();
+          await openFiles([
+            new File([await response.blob()], "comune-ceva.pdf.p7m", {
+              type: "application/pkcs7-mime",
+              lastModified: 0,
+            }),
+          ]);
+        } catch {
+          status.textContent = copy.demoError;
+        }
+      });
+      document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+        const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("theme", theme);
+      });
+      results.addEventListener("click", (event) => {
+        if ((event.target as Element).closest(".clear")) reset();
+      });
+      dropZone.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        dropZone.classList.add("dragging");
+      });
+      dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragging"));
+      dropZone.addEventListener("drop", (event) => {
+        event.preventDefault();
+        dropZone.classList.remove("dragging");
+        if (event.dataTransfer?.files.length) openFiles([...event.dataTransfer.files]);
+      });
+
+      type LaunchQueueWindow = Window & {
+        launchQueue?: {
+          setConsumer(consumer: (params: {
+            files: Array<{ getFile(): Promise<File> }>;
+          }) => void): void;
+        };
+      };
+      (window as LaunchQueueWindow).launchQueue?.setConsumer(async ({ files }) => {
+        if (files.length) await openFiles(await Promise.all(files.map((handle) => handle.getFile())));
+      });
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.addEventListener("message", ({ data }) => {
+          if (data?.type === "shared-p7m") {
+            openFiles([new File([data.bytes], data.name, { type: data.mime })]);
+          }
+        });
+        addEventListener("load", async () => {
+          const registration = await navigator.serviceWorker.register("/service-worker.js");
+          await navigator.serviceWorker.ready;
+          (navigator.serviceWorker.controller || registration.active)?.postMessage("take-shared-p7m");
+        });
+      }
+    </script>
+  </body>
+</html>

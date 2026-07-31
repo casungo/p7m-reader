@@ -17,10 +17,13 @@ un server e non serve creare un account.
 - lettura best-effort dei metadati PDF non compressi;
 - apertura di più file nella stessa sessione;
 - file P7M demo per provare subito il flusso;
+- interfaccia e pagine SEO statiche in 14 lingue;
 - tema chiaro e scuro;
 - riapertura offline dopo la prima visita;
 - apertura dei `.p7m` dal file manager quando la PWA è installata in un browser
   Chromium desktop che supporta File Handling.
+- ricezione dei `.p7m` dal menu Condividi sui browser installabili che supportano
+  Web Share Target.
 
 Non esiste un limite di dimensione imposto dall'applicazione. La dimensione
 gestibile dipende dalla memoria disponibile nel browser.
@@ -67,7 +70,9 @@ pnpm wrangler dev
 
 ## Architettura
 
-- `src/pages/index.astro` contiene la pagina e il flusso client;
+- `src/components/ReaderPage.astro` contiene la pagina e il flusso client;
+- `src/i18n.ts` è la fonte unica per lingue, route e testi;
+- `src/pages/index.astro` e `src/pages/[lang]/[slug].astro` generano le route;
 - `src/workers/p7m.worker.ts` esegue il parsing fuori dal thread principale;
 - `src/lib/unpack-p7m.ts` estrae le buste PKCS#7 con `node-forge`;
 - `src/lib/p7m.ts` riconosce il contenuto, genera i nomi e legge i metadati PDF;

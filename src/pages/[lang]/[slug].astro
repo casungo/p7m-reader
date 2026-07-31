@@ -1,0 +1,16 @@
+---
+import ReaderPage from "../../components/ReaderPage.astro";
+import { translatedLocales, type Locale } from "../../i18n";
+
+export function getStaticPaths() {
+  return translatedLocales.map((locale) => ({
+    params: { lang: locale.segment, slug: locale.slug },
+    props: { locale },
+  }));
+}
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+
+<ReaderPage locale={locale} />

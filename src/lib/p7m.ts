@@ -37,10 +37,10 @@ export const extractedName = (name: string, ext: string) => {
   return bare.toLowerCase().endsWith(`.${ext}`) ? bare : `${bare || "documento"}.${ext}`;
 };
 
-export const formatFileSize = (bytes: number) => {
+export const formatFileSize = (bytes: number, locale = "it-IT") => {
   const units = ["byte", "kilobyte", "megabyte", "gigabyte"] as const;
   const unit = Math.min(Math.floor(Math.log(Math.max(bytes, 1)) / Math.log(1024)), units.length - 1);
-  return new Intl.NumberFormat("it-IT", {
+  return new Intl.NumberFormat(locale, {
     style: "unit",
     unit: units[unit],
     maximumFractionDigits: unit ? 1 : 0,

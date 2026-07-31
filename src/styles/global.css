@@ -131,6 +131,7 @@ a {
 .header-link,
 .support-link,
 .theme-toggle,
+.language-menu > summary,
 .release-menu > summary {
   display: inline-flex;
   min-height: 44px;
@@ -152,6 +153,7 @@ a {
 
 .header-link:hover,
 .theme-toggle:hover,
+.language-menu > summary:hover,
 .release-menu > summary:hover {
   background: var(--paper);
 }
@@ -199,16 +201,46 @@ a {
   display: block;
 }
 
+.language-menu,
 .release-menu {
   position: relative;
 }
 
+.language-menu > summary,
 .release-menu > summary {
   list-style: none;
 }
 
+.language-menu > summary::-webkit-details-marker,
 .release-menu > summary::-webkit-details-marker {
   display: none;
+}
+
+.language-menu > div {
+  position: absolute;
+  z-index: 3;
+  inset-block-start: calc(100% + 8px);
+  inset-inline-end: 0;
+  display: grid;
+  width: 300px;
+  grid-template-columns: 1fr 1fr;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 12px 34px oklch(0.22 0.018 260 / 0.16), 0 0 0 1px oklch(0 0 0 / 0.08);
+}
+
+.language-menu a {
+  padding: 8px;
+  border-radius: 4px;
+  color: var(--ink);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.language-menu a:hover,
+.language-menu a[aria-current="page"] {
+  background: var(--paper);
 }
 
 .release-menu > summary span {
@@ -790,6 +822,11 @@ pre {
 
   .header-actions {
     width: 100%;
+  }
+
+  .language-menu > div {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
   }
 
   .release-menu {

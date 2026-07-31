@@ -8,6 +8,8 @@ import {
   readPdfMetadata,
 } from "../src/lib/p7m.ts";
 import { currentRelease } from "../src/lib/release.ts";
+import { locales } from "../src/i18n.ts";
+import { GET as sitemap } from "../src/pages/sitemap.xml.ts";
 import { unpackP7m } from "../src/lib/unpack-p7m.ts";
 import worker from "../src/worker.ts";
 
@@ -90,4 +92,21 @@ test("registra solo metriche anonime dalla stessa origine", async () => {
   } finally {
     console.info = originalInfo;
   }
+});
+
+test("genera le 14 route localizzate e il PWA share target", async () => {
+  assert.equal(locales.length, 14);
+  assert.equal(new Set(locales.map(({ path }) => path)).size, 14);
+  assert.equal(locales[0].code, "en");
+  assert.ok(locales.every(({ copy }) => copy.metaTitle.includes("P7M Reader")));
+
+  const xml = await sitemap().text();
+  for (const { code, path } of locales) {
+    assert.match(xml, new RegExp(`hreflang="${code.replace("-", "\\-")}"`));
+    assert.ok(xml.includes(`https://p7mreader.eu${path}`));
+  }
+
+  const manifest = JSON.parse(await readFile("public/manifest.webmanifest", "utf8"));
+  assert.equal(manifest.share_target.params.files[0].name, "p7m");
+  assert.ok(manifest.share_target.params.files[0].accept.includes(".p7m"));
 });
