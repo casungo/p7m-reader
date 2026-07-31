@@ -110,6 +110,9 @@ Current product state:
 - Keep the Italian root as the only locale until product-specific Search
   Console queries justify another fully translated static route. Do not copy
   the broad Excel-to-Markdown locale set without P7M demand.
+- The empty state includes a bundled public P7M demo so visitors can exercise
+  the real parser immediately; keep it on the same local extraction path as
+  user-selected files.
 
 ## Git workflow
 

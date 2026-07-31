@@ -356,6 +356,18 @@ input[type="file"] {
   scale: 0.96;
 }
 
+.demo-file {
+  margin-block-start: 14px;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
 .empty-content small {
   margin-block-start: 13px;
   color: var(--muted);

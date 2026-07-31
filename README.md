@@ -16,6 +16,7 @@ un server e non serve creare un account.
 - visualizzazione di nome e periodo di validità dichiarato dei certificati;
 - lettura best-effort dei metadati PDF non compressi;
 - apertura di più file nella stessa sessione;
+- file P7M demo per provare subito il flusso;
 - tema chiaro e scuro;
 - riapertura offline dopo la prima visita;
 - apertura dei `.p7m` dal file manager quando la PWA è installata in un browser

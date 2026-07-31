@@ -105,7 +105,7 @@ const structuredData = {
   </head>
   <body>
     <header class="app-header">
-      <a class="brand" href="/" aria-label="P7M Reader">
+      <a class="brand" href="/">
         <img src="/icon.svg" alt="" width="42" height="42" />
         <span><strong>P7M Reader</strong><small>p7mreader.eu</small></span>
       </a>
@@ -146,6 +146,7 @@ const structuredData = {
               <img src="/icon.svg" alt="" width="64" height="64" />
               <p>Apri un file P7M per leggere ed estrarre il contenuto, senza caricarlo online.</p>
               <label for="file">Scegli un file P7M</label>
+              <button class="demo-file" type="button">Prova con un file demo</button>
               <small>Oppure trascina e rilascia qui il file</small>
             </div>
             <dl class="empty-meta">
@@ -249,6 +250,7 @@ const structuredData = {
       const status = document.querySelector<HTMLElement>("#status")!;
       const results = document.querySelector<HTMLElement>("#results")!;
       const template = document.querySelector<HTMLTemplateElement>("#result-template")!;
+      const demoButton = document.querySelector<HTMLButtonElement>(".demo-file")!;
       const objectUrls: string[] = [];
 
       const track = (event: "opened" | "failed") => {
@@ -424,6 +426,22 @@ const structuredData = {
       };
 
       input.addEventListener("change", () => input.files && openFiles([...input.files]));
+      demoButton.addEventListener("click", async () => {
+        try {
+          const response = await fetch(
+            new URL("../../samples/comune-ceva.pdf.p7m", import.meta.url),
+          );
+          if (!response.ok) throw new Error();
+          await openFiles([
+            new File([await response.blob()], "comune-ceva.pdf.p7m", {
+              type: "application/pkcs7-mime",
+              lastModified: 0,
+            }),
+          ]);
+        } catch {
+          status.textContent = "Impossibile caricare il file demo";
+        }
+      });
       document.querySelector(".theme-toggle")?.addEventListener("click", () => {
         const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = theme;
