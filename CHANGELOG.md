@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.0 - 2026-07-31
+
+- Interfaccia, metadati SEO, FAQ e route statiche disponibili nelle stesse 14 lingue di Excel to Markdown.
+- Sitemap con alternate `hreflang` reciproci e selettore lingua responsive.
+- PWA aggiornata: cache offline di tutte le lingue e apertura locale dei `.p7m` ricevuti dal menu Condividi.
+- File P7M demo per provare subito il parser reale e correzione del nome accessibile del marchio.
+- Aggiornamento ad Astro 7, TypeScript 6, `node-forge` 1.4 e dipendenze di sviluppo correnti.
+
 ## 1.3.1 - 2026-07-31
 
 - Registra gli eventi anonimi nei log nativi del Worker, disponibili senza attivare servizi aggiuntivi.
