@@ -20,15 +20,15 @@ export type PdfMetadata = {
 };
 
 export const detectP7mContent = (bytes: Uint8Array): P7mContent => {
-  const head = new TextDecoder("ascii").decode(bytes.slice(0, 16));
+  const startsWith = (signature: number[]) => signature.every((byte, index) => bytes[index] === byte);
   const text = new TextDecoder().decode(bytes.slice(0, 300)).trimStart();
-  if (head.startsWith("%PDF-")) return { type: "application/pdf", ext: "pdf", label: "PDF" };
+  if (startsWith([0x25, 0x50, 0x44, 0x46, 0x2d])) return { type: "application/pdf", ext: "pdf", label: "PDF" };
   if (text.startsWith("<?xml") || /^<[\w:.-]+[\s>]/.test(text)) {
     return { type: "application/xml", ext: "xml", label: "XML" };
   }
-  if (head.startsWith("\x89PNG")) return { type: "image/png", ext: "png", label: "Immagine PNG" };
-  if (head.startsWith("\xff\xd8\xff")) return { type: "image/jpeg", ext: "jpg", label: "Immagine JPEG" };
-  if (head.startsWith("GIF8")) return { type: "image/gif", ext: "gif", label: "Immagine GIF" };
+  if (startsWith([0x89, 0x50, 0x4e, 0x47])) return { type: "image/png", ext: "png", label: "Immagine PNG" };
+  if (startsWith([0xff, 0xd8, 0xff])) return { type: "image/jpeg", ext: "jpg", label: "Immagine JPEG" };
+  if (startsWith([0x47, 0x49, 0x46, 0x38])) return { type: "image/gif", ext: "gif", label: "Immagine GIF" };
   return { type: "application/octet-stream", ext: "bin", label: "File" };
 };
 

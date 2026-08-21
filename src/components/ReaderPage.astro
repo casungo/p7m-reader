@@ -243,6 +243,7 @@ const structuredData = {
       const template = document.querySelector<HTMLTemplateElement>("#result-template")!;
       const demoButton = document.querySelector<HTMLButtonElement>(".demo-file")!;
       const objectUrls: string[] = [];
+      const sharedP7mToken = new URLSearchParams(location.hash.slice(1)).get("shared-p7m");
 
       const track = (event: "opened" | "failed") => {
         if (navigator.onLine) navigator.sendBeacon?.(`/metrics/${event}`);
@@ -255,7 +256,7 @@ const structuredData = {
       });
 
       const unpackFile = (file: File) =>
-        new Promise<Required<Pick<WorkerReply, "bytes" | "certificates">>>(async (resolve, reject) => {
+        new Promise<Required<Pick<WorkerReply, "bytes" | "certificates">>>((resolve, reject) => {
           const worker = new Worker(
             new URL("../workers/p7m.worker.ts", import.meta.url),
             { type: "module" },
@@ -272,8 +273,12 @@ const structuredData = {
             worker.terminate();
             reject(new Error("Impossibile elaborare il file"));
           });
-          const bytes = await file.arrayBuffer();
-          worker.postMessage(bytes, [bytes]);
+          file.arrayBuffer()
+            .then((bytes) => worker.postMessage(bytes, [bytes]))
+            .catch((error) => {
+              worker.terminate();
+              reject(error);
+            });
         });
 
       const renderFile = async (file: File) => {
@@ -468,7 +473,13 @@ const structuredData = {
         addEventListener("load", async () => {
           const registration = await navigator.serviceWorker.register("/service-worker.js");
           await navigator.serviceWorker.ready;
-          (navigator.serviceWorker.controller || registration.active)?.postMessage("take-shared-p7m");
+          if (sharedP7mToken) {
+            (navigator.serviceWorker.controller || registration.active)?.postMessage({
+              type: "take-shared-p7m",
+              token: sharedP7mToken,
+            });
+            history.replaceState(null, "", location.pathname);
+          }
         });
       }
     </script>

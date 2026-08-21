@@ -1,5 +1,6 @@
-const cacheName = "p7m-reader-v8";
-const sharedFileKey = "/__shared-p7m";
+const cacheName = "p7m-reader-v9";
+const sharedFileKey = (token) => `/__shared-p7m/${token}`;
+const sharedFileParam = "shared-p7m";
 const localePages = [
   "/de/p7m-datei-oeffnen/",
   "/pt-br/abrir-arquivo-p7m/",
@@ -51,14 +52,21 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
-  if (event.request.method === "POST" && url.origin === location.origin && url.pathname === "/share-target") {
+  if (
+    event.request.method === "POST" &&
+    event.request.mode === "navigate" &&
+    url.origin === location.origin &&
+    url.pathname === "/share-target"
+  ) {
     event.respondWith((async () => {
       const file = (await event.request.formData()).get("p7m");
-      if (file instanceof File) {
-        const headers = new Headers({ "Content-Type": file.type, "X-P7M-Name": encodeURIComponent(file.name) });
-        await (await caches.open(cacheName)).put(sharedFileKey, new Response(file, { headers }));
-      }
-      return (await caches.match("/")) || fetch("/");
+      if (!(file instanceof File)) return Response.redirect(new URL("/", url), 303);
+      const token = crypto.randomUUID();
+      const headers = new Headers({ "Content-Type": file.type, "X-P7M-Name": encodeURIComponent(file.name) });
+      await (await caches.open(cacheName)).put(sharedFileKey(token), new Response(file, { headers }));
+      const destination = new URL("/", url);
+      destination.hash = new URLSearchParams([[sharedFileParam, token]]).toString();
+      return Response.redirect(destination, 303);
     })());
     return;
   }
@@ -75,10 +83,10 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("message", (event) => {
-  if (event.data !== "take-shared-p7m") return;
+  if (event.data?.type !== "take-shared-p7m" || typeof event.data.token !== "string") return;
   event.waitUntil((async () => {
     const cache = await caches.open(cacheName);
-    const response = await cache.match(sharedFileKey);
+    const response = await cache.match(sharedFileKey(event.data.token));
     if (!response || !event.source) return;
     const bytes = await response.arrayBuffer();
     event.source.postMessage({
@@ -87,6 +95,6 @@ self.addEventListener("message", (event) => {
       name: decodeURIComponent(response.headers.get("X-P7M-Name") || "document.p7m"),
       mime: response.headers.get("Content-Type") || "application/pkcs7-mime",
     }, [bytes]);
-    await cache.delete(sharedFileKey);
+    await cache.delete(sharedFileKey(event.data.token));
   })());
 });

@@ -116,8 +116,9 @@ Current product state:
   the real parser immediately; keep it on the same local extraction path as
   user-selected files.
 - The PWA caches every locale shell and accepts shared `.p7m` files through a
-  local service-worker handoff. Never route shared file bytes through the
-  Worker or another server.
+  local service-worker handoff. Key each handoff with an unguessable token and
+  consume it once; never route shared file bytes through the Worker or another
+  server.
 - Astro 7 is intentional. TypeScript stays on 6 until `astro check` supports
   TypeScript 7's compiler API.
 

@@ -31,6 +31,36 @@ test("riconosce contenuti comuni e conserva i nomi", () => {
   assert.equal(extractedName("atto.p7m.p7m", "xml"), "atto.xml");
 });
 
+test("verifica le fixture sintetiche per MIME, nome, annidamento e limite", async () => {
+  const cases = [
+    ["synthetic-xml.p7m", "application/xml", "xml"],
+    ["synthetic-png.p7m", "image/png", "png"],
+    ["synthetic-jpeg.p7m", "image/jpeg", "jpg"],
+    ["synthetic-gif.p7m", "image/gif", "gif"],
+    ["synthetic-binary.p7m", "application/octet-stream", "bin"],
+  ] as const;
+
+  for (const [name, type, ext] of cases) {
+    const { bytes, certificates } = unpackP7m(
+      new Uint8Array(await readFile(`test/fixtures/${name}`)),
+    );
+    assert.equal(detectP7mContent(bytes).type, type);
+    assert.equal(extractedName(`document.${ext}.p7m`, ext), `document.${ext}`);
+    assert.equal(certificates.length, 1);
+  }
+
+  const nested = unpackP7m(
+    new Uint8Array(await readFile("test/fixtures/synthetic-nested-2.p7m")),
+  );
+  assert.equal(detectP7mContent(nested.bytes).ext, "xml");
+  assert.equal(nested.certificates.length, 2);
+
+  const invalid = new Uint8Array(await readFile("test/fixtures/synthetic-invalid.p7m"));
+  const tooDeep = new Uint8Array(await readFile("test/fixtures/synthetic-depth-6.p7m"));
+  assert.throws(() => unpackP7m(invalid));
+  assert.throws(() => unpackP7m(tooDeep), /troppe firme annidate/);
+});
+
 test("formatta dimensione file e metadati PDF", async () => {
   assert.equal(formatFileSize(512), "512 byte");
   assert.match(formatFileSize(2048), /^2\s?kB$/);
