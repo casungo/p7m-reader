@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.2 - 2026-08-24
+
+- Rende più sicuro il passaggio dei file P7M dal menu Condividi usando un token monouso invece di una chiave condivisa fissa.
+- Estende i test del parser a contenuti sintetici, buste annidate e limite di profondità.
+- Aggiorna Astro e Wrangler alle versioni usate dalla build corrente.
+
 ## 1.4.1 - 2026-07-31
 
 - Versiona l'URL del manifest PWA per evitare che la cache Cloudflare mantenga la configurazione precedente dopo una release.
