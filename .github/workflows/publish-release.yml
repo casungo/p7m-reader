@@ -6,6 +6,7 @@ on:
       - "v*"
 
 permissions:
+  actions: write
   contents: write
 
 jobs:
@@ -45,3 +46,4 @@ jobs:
             --verify-tag \
             --title "P7M Reader $RELEASE_TAG" \
             --notes "$NOTES"
+          gh workflow run release.yml --ref "$RELEASE_TAG" -f tag="$RELEASE_TAG"
