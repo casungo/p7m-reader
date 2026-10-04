@@ -10,10 +10,10 @@
 </svg>
 
     <text x="158" y="101" font-size="30" font-weight="700">P7M Reader</text>
-    <text x="76" y="226" font-size="16" letter-spacing="3" fill="#637382">OPEN &amp; EXTRACT</text>
-    <text x="72" y="312" font-size="58" font-weight="700" letter-spacing="-2">Open P7M files.</text>
-    <text x="72" y="385" font-size="58" font-weight="700" letter-spacing="-2">Extract your PDF.</text>
-    <text x="76" y="448" font-size="25" fill="#637382">No upload. No account.</text>
+    <text x="76" y="226" font-size="16" letter-spacing="3" fill="#637382">APRI ED ESTRAI</text>
+    <text x="72" y="312" font-size="58" font-weight="700" letter-spacing="-2">Apri file P7M.</text>
+    <text x="72" y="385" font-size="58" font-weight="700" letter-spacing="-2">Estrai il tuo PDF.</text>
+    <text x="76" y="448" font-size="25" fill="#637382">Nessun upload. Nessun account.</text>
     <text x="76" y="557" font-size="22" font-weight="700">p7mreader.eu</text>
     <path d="M832 145h200l68 68v283H832z" fill="#fdfefe" stroke="#d2dbe2" stroke-width="2"/>
     <path d="M1032 145v68h68" fill="#e6edf2" stroke="#d2dbe2" stroke-width="2"/>
@@ -21,6 +21,6 @@
     <path d="M858 309h204" stroke="#d2dbe2" stroke-width="2"/>
     <rect x="867" y="343" width="198" height="102" rx="8" fill="#f2f5f7" stroke="#d2dbe2"/>
     <text x="966" y="409" text-anchor="middle" font-size="46" font-weight="700">PDF</text>
-    <text x="966" y="549" text-anchor="middle" font-size="17" fill="#637382">PDF · XML · Images</text>
+    <text x="966" y="549" text-anchor="middle" font-size="17" fill="#637382">PDF · XML · Immagini</text>
   </g>
 </svg>

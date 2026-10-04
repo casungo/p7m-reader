@@ -742,22 +742,29 @@ pre {
   color: var(--ink);
 }
 
-.faq-list > div {
-  padding-block: 6px;
+.faq-list > details {
   border-block-start: 1px solid var(--line);
 }
 
-.faq-list > div:last-child {
+.faq-list > details:last-child {
   border-block-end: 1px solid var(--line);
 }
 
-.faq-list h3 {
-  margin: 0 0 3px;
+.faq-list summary {
+  align-content: center;
+  min-height: 40px;
+  padding-block: 8px;
   font-size: 0.78rem;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.faq-list summary:hover {
+  color: var(--blue);
 }
 
 .faq-list p {
+  padding-block-end: 10px;
   font-size: 0.72rem;
 }
 
@@ -787,6 +794,10 @@ pre {
 }
 
 @media (max-width: 1050px) {
+  .faq-list summary {
+    min-height: 44px;
+  }
+
   .app-shell {
     display: block;
     height: auto;

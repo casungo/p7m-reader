@@ -55,16 +55,20 @@ export type Locale = {
 };
 
 const en: Copy = {
-  metaTitle: "P7M Reader – Open and extract P7M files online",
-  metaDescription: "Open and extract P7M files locally in your browser. No upload and no account: the document stays on your device.",
-  heroTitle: "Read a P7M file. Your document stays yours.",
-  intro: "View the contents of a .p7m file directly in your browser. PDFs, XML and images stay on your device.",
+  metaTitle: "Open P7M files and extract PDF online | P7M Reader",
+  metaDescription: "Open .p7m and .pdf.p7m files online for free. Extract and download the embedded PDF, XML or image in your browser. No upload, no account.",
+  heroTitle: "Open P7M files. Extract your PDF.",
+  intro: "Open a .p7m or .pdf.p7m file and download the document inside. Preview PDF, XML and images locally, without uploading your file.",
   choose: "Choose a P7M file", demo: "Try a demo file", drop: "Or drag and drop the file here", download: "Download document",
   how: "How it works",
   steps: ["Choose the P7M file|Select it or drag it from your device.", "View the content|We open the embedded document locally.", "Download the document|Save the extracted content with one click."],
   benefits: ["Private: no file is uploaded.", "Fast: no account or waiting.", "Compatible: PDF, XML, PNG, JPEG and GIF.", "Offline: works without a connection."],
   faqTitle: "FAQ and limitations",
   faqs: [
+    { question: "What is a P7M file?", answer: "A .p7m file is a digitally signed PKCS#7 container. It can hold a PDF, XML or another document. P7M Reader extracts the embedded content without verifying the signature." },
+    { question: "How do I convert P7M to PDF?", answer: "Choose your P7M file, preview the embedded PDF and select Download document. This extracts the original PDF. If the P7M contains XML or another format, P7M Reader downloads that format and does not convert it to PDF." },
+    { question: "How do I open a .pdf.p7m file?", answer: "Select or drop the .pdf.p7m file here. P7M Reader opens the PDF inside the signed container. Renaming the file to .pdf does not extract the document." },
+    { question: "Can I open P7M files on a phone?", answer: "Yes. Choose the .p7m file from your phone in a browser on Android or iPhone. No account is required. PDF preview depends on the browser; you can also download the extracted document." },
     { question: "Are files uploaded to a server?", answer: "No. Reading, extraction and preview happen in the browser. We record only anonymous success or error events, never file names or contents." },
     { question: "Does it verify the legal validity of the signature?", answer: "No. It displays readable certificate data but does not verify integrity, revocation, timestamps or legal validity." },
     { question: "Which contents can I preview?", answer: "PDF, XML, PNG, JPEG and GIF images. Other contents can be extracted and downloaded as binary files." },
@@ -109,13 +113,17 @@ const de: Copy = {
 
 const it: Copy = {
   ...en,
-  metaTitle: "P7M Reader – Apri ed estrai file P7M online", metaDescription: "Apri ed estrai file P7M con P7M Reader. Nessun upload, nessun account: il documento resta sul tuo dispositivo.",
-  heroTitle: "Leggi un file P7M. Il documento resta tuo.", intro: "Visualizza il contenuto di un file .p7m direttamente nel browser. PDF, XML e immagini restano sul tuo dispositivo.",
+  metaTitle: "Apri file P7M ed estrai PDF online | P7M Reader", metaDescription: "Apri file .p7m e .pdf.p7m online gratis. Estrai e scarica il PDF, XML o l'immagine contenuta nel browser. Nessun upload, nessun account.",
+  heroTitle: "Apri file P7M. Estrai il tuo PDF.", intro: "Apri un file .p7m o .pdf.p7m e scarica il documento contenuto. Visualizza PDF, XML e immagini nel browser, senza inviare il file a un server.",
   choose: "Scegli un file P7M", demo: "Prova con un file demo", drop: "Oppure trascina e rilascia qui il file", download: "Scarica documento", how: "Come funziona",
-  steps: ["Carica il file P7M|Selezionalo o trascinalo dal dispositivo.", "Visualizza il contenuto|Apriamo localmente il documento incorporato.", "Scarica il documento|Salva il contenuto estratto con un clic."],
+  steps: ["Scegli il file P7M|Selezionalo o trascinalo dal dispositivo.", "Visualizza il contenuto|Apriamo localmente il documento incorporato.", "Scarica il documento|Salva il contenuto estratto con un clic."],
   benefits: ["Privato: nessun file viene caricato.", "Veloce: nessun account o attesa.", "Compatibile: PDF, XML, PNG, JPEG e GIF.", "Offline: funziona anche senza connessione."],
   faqTitle: "FAQ e limitazioni",
   faqs: [
+    { question: "Cos'è un file P7M?", answer: "Un file .p7m è una busta PKCS#7 con firma digitale. Può contenere un PDF, un XML o un altro documento. P7M Reader estrae il contenuto incorporato senza verificare la firma." },
+    { question: "Come convertire un P7M in PDF?", answer: "Scegli il file P7M, visualizza il PDF contenuto e premi Scarica documento. Ottieni il PDF originale tramite estrazione. Se il P7M contiene un XML o un altro formato, P7M Reader scarica quel formato e non lo converte in PDF." },
+    { question: "Come aprire un file .pdf.p7m?", answer: "Seleziona o trascina qui il file .pdf.p7m. P7M Reader apre il PDF dentro la busta firmata. Rinominare il file in .pdf non estrae il documento." },
+    { question: "Posso aprire file P7M dal cellulare?", answer: "Sì. Scegli il file .p7m dal telefono in un browser su Android o iPhone. Non serve un account. L'anteprima PDF dipende dal browser; puoi anche scaricare il documento estratto." },
     { question: "I file vengono caricati su un server?", answer: "No. Lettura, estrazione e anteprima avvengono nel browser. Registriamo solo eventi anonimi di riuscita o errore, mai nomi o contenuti dei file." },
     { question: "Il servizio verifica la validità legale della firma?", answer: "No. Mostra i dati leggibili dei certificati, ma non verifica integrità, revoca, marca temporale o validità legale della firma." },
     { question: "Quali contenuti posso visualizzare?", answer: "PDF, XML, immagini PNG, JPEG e GIF. Gli altri contenuti possono essere estratti e scaricati come file binario." },

@@ -12,7 +12,10 @@ const copy = locale.copy;
 const title = copy.metaTitle;
 const description = copy.metaDescription;
 const canonical = new URL(locale.path, Astro.site);
-const socialImage = new URL("/og-image.png", Astro.site);
+const socialImage = new URL(locale.code === "it" ? "/og-p7m-pdf-it.png" : "/og-p7m-pdf.png", Astro.site);
+const socialImageAlt = locale.code === "it"
+  ? "P7M Reader. Apri file P7M ed estrai il PDF. Nessun upload, nessun account."
+  : "P7M Reader. Open P7M files and extract PDF. No upload, no account.";
 const release = currentRelease(
   changelog,
   packageJson.version,
@@ -25,18 +28,46 @@ const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://p7mreader.eu/#website",
+      name: "P7M Reader",
+      url: "https://p7mreader.eu/",
+      inLanguage: locales.map(({ code }) => code),
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      url: canonical.href,
+      name: title,
+      description,
+      inLanguage: locale.code,
+      isPartOf: { "@id": "https://p7mreader.eu/#website" },
+      mainEntity: { "@id": "https://p7mreader.eu/#app" },
+      primaryImageOfPage: {
+        "@type": "ImageObject", url: socialImage.href, width: 1200, height: 630,
+      },
+    },
+    {
       "@type": "WebApplication",
+      "@id": "https://p7mreader.eu/#app",
       name: "P7M Reader",
       url: "https://p7mreader.eu/",
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       browserRequirements: "JavaScript",
       description,
+      inLanguage: locale.code,
+      image: socialImage.href,
+      isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
       featureList: copy.benefits.slice(0, 3),
     },
     {
       "@type": "FAQPage",
+      "@id": `${canonical}#faq`,
+      url: `${canonical}#faq`,
+      inLanguage: locale.code,
+      isPartOf: { "@id": `${canonical}#webpage` },
       mainEntity: faq.map(({ question, answer }) => ({
         "@type": "Question",
         name: question,
@@ -54,21 +85,25 @@ const structuredData = {
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f2f5f7" />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="P7M Reader" />
     <meta property="og:locale" content={locale.ogLocale} />
+    {locales.filter(({ code }) => code !== locale.code).map((alternate) => <meta property="og:locale:alternate" content={alternate.ogLocale} />)}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={socialImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
     <link rel="canonical" href={canonical} />
     {locales.map((alternate) => <link rel="alternate" hreflang={alternate.code} href={new URL(alternate.path, Astro.site)} />)}
     <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />
@@ -170,14 +205,14 @@ const structuredData = {
           </ul>
         </section>
 
-        <section>
+        <section id="faq">
           <h2>{copy.faqTitle}</h2>
           <div class="faq-list">
             {faq.map(({ question, answer }) => (
-              <div>
-                <h3>{question}</h3>
+              <details>
+                <summary>{question}</summary>
                 <p>{answer}</p>
-              </div>
+              </details>
             ))}
           </div>
         </section>
