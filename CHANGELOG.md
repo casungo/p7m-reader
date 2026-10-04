@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.3 - 2026-10-04
+
+- Migliora titoli, descrizioni, istruzioni e FAQ per aprire P7M ed estrarre PDF o XML, con un esempio del file demo nella pagina italiana.
+- Aggiorna le anteprime social con immagini PNG da 1200×630 pixel, italiana e inglese, e metadati per la condivisione dei link.
+- Completa i testi dell’interfaccia nelle 14 lingue, inclusi messaggi di errore e descrizioni accessibili.
+- Mantiene canonical, hreflang e sitemap coerenti con un’origine comune e verifica l’HTML generato durante la build.
+- Aggiunge una pagina 404 con collegamenti allo strumento, mantenendo lo status di errore e l’esclusione dall’indice.
+- Aggiorna la cache PWA per le nuove pagine e documenta i dati Search Console e il redirect HTTP→HTTPS ancora da applicare nella configurazione Cloudflare.
+
 ## 1.4.2 - 2026-08-24
 
 - Rende più sicuro il passaggio dei file P7M dal menu Condividi usando un token monouso invece di una chiave condivisa fissa.

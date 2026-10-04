@@ -68,7 +68,7 @@ Current product state:
   typography.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
-- Version `1.4.2` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.4.3` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - `p7mreader.eu` is declared as a custom-domain route in `wrangler.jsonc`; keep
   that binding with the renamed `p7m-reader` Worker.
@@ -148,6 +148,8 @@ Current product state:
 - The empty state includes a bundled public P7M demo so visitors can exercise
   the real parser immediately; keep it on the same local extraction path as
   user-selected files.
+- Release 1.4.3 refreshes the offline cache to `p7m-reader-v10` so the new
+  locale shells and hashed assets are installed together.
 - The PWA caches every locale shell and accepts shared `.p7m` files through a
   local service-worker handoff. Key each handoff with an unguessable token and
   consume it once; never route shared file bytes through the Worker or another

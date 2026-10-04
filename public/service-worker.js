@@ -1,4 +1,4 @@
-const cacheName = "p7m-reader-v9";
+const cacheName = "p7m-reader-v10";
 const sharedFileKey = (token) => `/__shared-p7m/${token}`;
 const sharedFileParam = "shared-p7m";
 const localePages = [
