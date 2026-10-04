@@ -4,6 +4,7 @@ import changelog from "../../CHANGELOG.md?raw";
 import packageJson from "../../package.json";
 import { locales, type Locale } from "../i18n";
 import { currentRelease } from "../lib/release";
+import { site } from "../site";
 import "../styles/global.css";
 
 interface Props { locale: Locale }
@@ -27,9 +28,9 @@ const structuredData = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://p7mreader.eu/#website",
+      "@id": `${site}/#website`,
       name: "P7M Reader",
-      url: "https://p7mreader.eu/",
+      url: `${site}/`,
       inLanguage: locales.map(({ code }) => code),
     },
     {
@@ -39,26 +40,26 @@ const structuredData = {
       name: title,
       description,
       inLanguage: locale.code,
-      isPartOf: { "@id": "https://p7mreader.eu/#website" },
-      mainEntity: { "@id": "https://p7mreader.eu/#app" },
+      isPartOf: { "@id": `${site}/#website` },
+      mainEntity: { "@id": `${site}/#app` },
       primaryImageOfPage: {
         "@type": "ImageObject", url: socialImage.href, width: 1200, height: 630,
       },
     },
     {
       "@type": "WebApplication",
-      "@id": "https://p7mreader.eu/#app",
+      "@id": `${site}/#app`,
       name: "P7M Reader",
-      url: "https://p7mreader.eu/",
+      url: `${site}/`,
       applicationCategory: "UtilitiesApplication",
       operatingSystem: "Any",
       browserRequirements: "JavaScript",
       description,
-      inLanguage: locale.code,
+      inLanguage: locales.map(({ code }) => code),
       image: socialImage.href,
       isAccessibleForFree: true,
       offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-      featureList: copy.benefits.slice(0, 3),
+      featureList: copy.benefits,
     },
     {
       "@type": "FAQPage",

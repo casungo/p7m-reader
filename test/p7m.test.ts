@@ -58,7 +58,7 @@ test("verifica le fixture sintetiche per MIME, nome, annidamento e limite", asyn
   const invalid = new Uint8Array(await readFile("test/fixtures/synthetic-invalid.p7m"));
   const tooDeep = new Uint8Array(await readFile("test/fixtures/synthetic-depth-6.p7m"));
   assert.throws(() => unpackP7m(invalid));
-  assert.throws(() => unpackP7m(tooDeep), /troppe firme annidate/);
+  assert.throws(() => unpackP7m(tooDeep), { message: "P7M_TOO_MANY_NESTED_SIGNATURES" });
 });
 
 test("formatta dimensione file e metadati PDF", async () => {

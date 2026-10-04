@@ -1,0 +1,61 @@
+---
+import { defaultLocale, locales } from "../i18n";
+import "../styles/global.css";
+
+const italian = locales.find(({ code }) => code === "it")!;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex,follow" />
+    <title>Page not found | P7M Reader</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main class="not-found">
+      <a class="brand" href={defaultLocale.path}>
+        <img src="/icon.svg" alt="" width="44" height="44" />
+        <strong>P7M Reader</strong>
+      </a>
+      <p class="error-code">404</p>
+      <h1>Page not found</h1>
+      <p>This address does not exist. Open P7M Reader to extract your document.</p>
+      <p lang="it">Questa pagina non esiste. Apri P7M Reader per estrarre il tuo documento.</p>
+      <nav aria-label="Open P7M Reader">
+        <a href={defaultLocale.path} lang="en">Open P7M files</a>
+        <a href={italian.path} lang="it">Apri file P7M</a>
+      </nav>
+    </main>
+  </body>
+</html>
+
+<style>
+  .not-found {
+    width: min(100%, 36rem);
+    margin: 10vh auto;
+    padding: 24px;
+  }
+
+  .brand { width: fit-content; }
+  .error-code { margin-block-start: 48px; color: var(--muted); }
+  h1 { font-size: clamp(2rem, 8vw, 3rem); line-height: 1.1; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  nav { display: flex; flex-wrap: wrap; gap: 12px; margin-block-start: 28px; }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink);
+    background: var(--surface);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 120ms;
+  }
+  nav a:hover { background: var(--paper); }
+</style>

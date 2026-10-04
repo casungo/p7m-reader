@@ -7,7 +7,9 @@
     "dev": "astro dev --host 0.0.0.0",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "types": "wrangler types --include-runtime false",
-    "build": "pnpm test && astro check && astro build",
+    "build": "pnpm test && astro check && astro build && pnpm check:seo",
+    "check:seo": "node --experimental-strip-types scripts/check-seo.mjs",
+    "check:https": "node --experimental-strip-types scripts/check-https.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
