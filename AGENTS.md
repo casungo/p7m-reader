@@ -37,7 +37,8 @@ pnpm wrangler dev
 pnpm wrangler deploy
 ```
 
-`pnpm build` runs tests and `astro check` before building. For browser QA, test
+`pnpm build` runs tests and `astro check`, builds, then checks the generated SEO
+with `pnpm check:seo`. For browser QA, test
 both sample P7Ms, an invalid file, reset, mobile layout and offline reopening.
 
 ## Working rules
@@ -102,9 +103,29 @@ Current product state:
 - SEO is static: canonical and reciprocal hreflang cover all 14 locale routes
   in the generated sitemap. JSON-LD links WebSite, localized WebPage,
   WebApplication and the visible FAQ content. Keep the schema and HTML aligned.
+- `src/site.ts` defines the production origin used by Astro, sitemap and schema.
+  The build checks it against robots and the Wrangler custom domain, and checks
+  actual generated HTML, public image assets and the complete route inventory.
 - Italian and English copy covers opening P7M, extracting PDF and `.pdf.p7m`.
   Explain that extraction produces PDF only when the container embeds a PDF;
   do not imply XML-to-PDF conversion or signature verification.
+- The XML FAQ explains text preview and extraction of `.xml.p7m`; all supported
+  formats remain in the benefits. Keep eight FAQs in IT/EN so the initial
+  desktop sidebar fits without scrolling.
+- The custom `404.html` is noindex and links to the EN/IT tool. Cloudflare uses
+  `404-page` handling; missing routes must keep HTTP 404, including requests
+  with Accept: text/markdown. The sitemap contains only the 14 canonical tools.
+- The public audit on 2026-10-04 found HTTP returning 200 without an HTTPS
+  redirect and www returning TLS error 525. Documented in
+  `docs/seo-audit-2026-10-04.md`; these need authorized edge/DNS/TLS checks.
+  Do not claim they are fixed by the local build or change training policy
+  while improving search access. Read-only Search Console evidence received on
+  2026-10-04 confirms FR HTTP indexed with Google canonical HTTP, despite the
+  HTTPS user canonical. IT is indexed but has weak observed query visibility.
+  Prioritize the edge HTTPS redirect, then existing IT instructions/examples.
+  `pnpm check:https` checks public redirects without credentials or mutations;
+  it intentionally fails until the authorized Cloudflare change is applied.
+  Do not run Hermes weekly recaps or change Hermes to refresh these data.
 - FAQ answers remain in static HTML inside native details elements. Collapsed
   FAQs keep the desktop sidebar within 1440×900; expanding answers may scroll.
 - Social previews use public 1200×630 PNGs, Italian on the Italian route and

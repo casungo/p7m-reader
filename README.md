@@ -62,7 +62,9 @@ Comandi principali:
 
 ```sh
 pnpm test       # test di estrazione sui campioni reali
-pnpm build      # test, controllo Astro e build di produzione
+pnpm build      # test, controllo Astro, build e verifica SEO dell'HTML generato
+pnpm check:seo  # verifica SEO di dist/ dopo una build
+pnpm check:https # GET pubblici: verifica redirect HTTP→HTTPS, senza account
 pnpm preview    # anteprima locale della build
 pnpm types      # rigenera i tipi Cloudflare
 pnpm wrangler dev
@@ -72,6 +74,7 @@ pnpm wrangler dev
 
 - `src/components/ReaderPage.astro` contiene la pagina e il flusso client;
 - `src/i18n.ts` è la fonte unica per lingue, route e testi;
+- `src/site.ts` definisce l'origine canonica per Astro, sitemap e JSON-LD;
 - `src/pages/index.astro` e `src/pages/[lang]/[slug].astro` generano le route;
 - `src/workers/p7m.worker.ts` esegue il parsing fuori dal thread principale;
 - `src/lib/unpack-p7m.ts` estrae le buste PKCS#7 con `node-forge`;
@@ -80,6 +83,10 @@ pnpm wrangler dev
 - `src/worker.ts` serve gli asset su Cloudflare e riceve le sole metriche
   anonime;
 - `test/p7m.test.ts` verifica l'estrazione usando i due file in `samples/`.
+- `scripts/check-seo.mjs` controlla pagine canoniche, hreflang, schema, FAQ e
+  immagini nella build;
+- `src/pages/404.astro` offre il ritorno allo strumento, con noindex e status
+  404 per gli indirizzi assenti nel runtime Cloudflare.
 
 ## Metriche operative
 
@@ -99,6 +106,20 @@ Le FAQ sono presenti nell'HTML statico anche quando chiuse. Il JSON-LD descrive
 il sito, la pagina localizzata, l'app gratuita e le stesse domande visibili.
 Questi dati aiutano a descrivere il servizio; non garantiscono posizionamento,
 citazioni nelle risposte AI o risultati arricchiti.
+
+`pnpm build` verifica automaticamente le 14 pagine e la 404. La risposta XML
+nelle FAQ italiane e inglesi descrive estrazione e anteprima testuale, senza
+promettere la conversione di fatture in PDF.
+
+L'[audit del 4 ottobre 2026](docs/seo-audit-2026-10-04.md) contiene prove HTTP,
+matrice degli intenti, confronto con Excel to Markdown e piano Search Console
+e Bing a 28 e 56 giorni. Il controllo pubblico ha trovato HTTP senza redirect
+HTTPS e un errore TLS 525 sulla variante www: richiedono verifica e interventi
+autorizzati nella configurazione Cloudflare. Gli URL HTTPS principali funzionano.
+L’integrazione Search Console documenta la canonical HTTP scelta per la pagina
+francese e la scarsa visibilità italiana, pur con indicizzazione confermata.
+Il report prepara la regola 301 e i controlli successivi. `pnpm check:https`
+resta separato dalla build e deve fallire finché il redirect pubblico manca.
 
 Le anteprime usano PNG pubblici da 1200×630 pixel, con una variante italiana e
 una inglese. Per rigenerare immagini e sorgenti SVG dopo un cambio al layout:
