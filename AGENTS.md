@@ -148,6 +148,12 @@ Current product state:
 - The empty state includes a bundled public P7M demo so visitors can exercise
   the real parser immediately; keep it on the same local extraction path as
   user-selected files.
+- Release `v1.4.3` was published and deployed on 2026-10-04 from `f57e52f`;
+  CI and live checks confirmed all 14 routes, social PNGs and custom 404.
+  HTTP still returns 200 and www still returns 525; the release does not
+  apply the prepared Cloudflare redirect. Python urllib UA received 403/1010;
+  curl and the tested search/social UA strings received 200. Check account
+  rules only with separate authorization; UA checks do not prove real bot IP access.
 - Release 1.4.3 refreshes the offline cache to `p7m-reader-v10` so the new
   locale shells and hashed assets are installed together.
 - The PWA caches every locale shell and accepts shared `.p7m` files through a
