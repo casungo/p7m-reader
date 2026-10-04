@@ -67,7 +67,7 @@ Current product state:
   typography.
 - UI icons come from `@lucide/astro`; keep `public/icon.svg` custom because it is
   the product mark, not interface decoration.
-- Version `1.3.1` is recorded in `package.json` and `CHANGELOG.md`; the header
+- Version `1.4.2` is recorded in `package.json` and `CHANGELOG.md`; the header
   reads that changelog entry for its compact release menu.
 - `p7mreader.eu` is declared as a custom-domain route in `wrangler.jsonc`; keep
   that binding with the renamed `p7m-reader` Worker.
@@ -99,9 +99,18 @@ Current product state:
 - Release CI uploads and promotes a tagged Worker Version instead of running
   `wrangler deploy`; this preserves the existing custom-domain trigger and does
   not require route-write permission on every release.
-- SEO basics are static and dependency-free: Astro has the production `site`,
-  while `robots.txt`, the one-URL sitemap and the editable `og-image.svg`
-  source live in `public/`.
+- SEO is static: canonical and reciprocal hreflang cover all 14 locale routes
+  in the generated sitemap. JSON-LD links WebSite, localized WebPage,
+  WebApplication and the visible FAQ content. Keep the schema and HTML aligned.
+- Italian and English copy covers opening P7M, extracting PDF and `.pdf.p7m`.
+  Explain that extraction produces PDF only when the container embeds a PDF;
+  do not imply XML-to-PDF conversion or signature verification.
+- FAQ answers remain in static HTML inside native details elements. Collapsed
+  FAQs keep the desktop sidebar within 1440×900; expanding answers may scroll.
+- Social previews use public 1200×630 PNGs, Italian on the Italian route and
+  English elsewhere. `scripts/generate-social-images.mjs` regenerates SVG and
+  PNG assets with librsvg and DejaVu Sans. Keep the old image URL available,
+  and use a new image filename when changing published artwork to avoid caches.
 - The manifest uses raster install icons plus a maskable icon. Chromium desktop
   can pass `.p7m` files to the installed PWA through `file_handlers` and
   `launchQueue`; other browsers keep the normal picker and drag-and-drop flow.
@@ -112,6 +121,9 @@ Current product state:
 - The English root and 13 translated static routes match Excel-to-Markdown's
   language set. Keep `src/i18n.ts`, reciprocal hreflang links, the generated
   sitemap and the language menu in sync.
+- Keep every user-facing `Copy` field populated for every locale, including
+  screen-reader text, social-image alt text and parser errors. Use stable parser
+  error codes so localized messages do not depend on source-language wording.
 - The empty state includes a bundled public P7M demo so visitors can exercise
   the real parser immediately; keep it on the same local extraction path as
   user-selected files.

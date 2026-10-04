@@ -88,6 +88,31 @@ osservabili del Worker.
 
 Le richieste a `/metrics/*` sono accettate soltanto dalla stessa origine.
 
+## SEO e anteprime social
+
+Le 14 pagine includono canonical, hreflang reciproci, sitemap e metadati Open
+Graph e Twitter. I testi italiani e inglesi rispondono anche alle ricerche
+su P7M in PDF e `.pdf.p7m`: il PDF viene estratto solo quando è già contenuto
+nella busta. L'app non converte XML o immagini in PDF.
+
+Le FAQ sono presenti nell'HTML statico anche quando chiuse. Il JSON-LD descrive
+il sito, la pagina localizzata, l'app gratuita e le stesse domande visibili.
+Questi dati aiutano a descrivere il servizio; non garantiscono posizionamento,
+citazioni nelle risposte AI o risultati arricchiti.
+
+Le anteprime usano PNG pubblici da 1200×630 pixel, con una variante italiana e
+una inglese. Per rigenerare immagini e sorgenti SVG dopo un cambio al layout:
+
+```sh
+node scripts/generate-social-images.mjs
+```
+
+Il comando richiede `rsvg-convert` e i font DejaVu Sans. I PNG sono versionati:
+la build e la CI non richiedono questi strumenti. Quando cambia la grafica,
+cambiare anche il nome dell'immagine referenziata nei metadati per evitare la
+vecchia cache delle anteprime. WhatsApp e gli altri servizi decidono quando
+aggiornare la propria anteprima; la verifica finale richiede la pagina pubblicata.
+
 ## Verifica manuale
 
 Dopo `pnpm build`, controllare:
