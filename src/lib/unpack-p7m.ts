@@ -34,7 +34,7 @@ export const unpackP7m = (inputBytes: Uint8Array) => {
         name:
           certificate.subject.getField("CN")?.value ??
           certificate.subject.getField("O")?.value ??
-          "Firmatario non indicato",
+          "",
         notBefore: certificate.validity.notBefore,
         notAfter: certificate.validity.notAfter,
       })),
@@ -47,7 +47,7 @@ export const unpackP7m = (inputBytes: Uint8Array) => {
         (message as typeof message & { rawCapture?: { content?: AsnNode } })
           .rawCapture?.content,
       );
-    if (!content) throw new Error("Documento contenuto non trovato");
+    if (!content) throw new Error("P7M_NO_EMBEDDED_DOCUMENT");
     bytes = Uint8Array.from(content, (character) => character.charCodeAt(0));
 
     try {
@@ -57,5 +57,5 @@ export const unpackP7m = (inputBytes: Uint8Array) => {
     }
   }
 
-  throw new Error("Il file contiene troppe firme annidate");
+  throw new Error("P7M_TOO_MANY_NESTED_SIGNATURES");
 };

@@ -13,9 +13,7 @@ const title = copy.metaTitle;
 const description = copy.metaDescription;
 const canonical = new URL(locale.path, Astro.site);
 const socialImage = new URL(locale.code === "it" ? "/og-p7m-pdf-it.png" : "/og-p7m-pdf.png", Astro.site);
-const socialImageAlt = locale.code === "it"
-  ? "P7M Reader. Apri file P7M ed estrai il PDF. Nessun upload, nessun account."
-  : "P7M Reader. Open P7M files and extract PDF. No upload, no account.";
+const socialImageAlt = copy.socialImageAlt;
 const release = currentRelease(
   changelog,
   packageJson.version,
@@ -124,7 +122,7 @@ const structuredData = {
         <img src="/icon.svg" alt="" width="42" height="42" />
         <span><strong>P7M Reader</strong><small>p7mreader.eu</small></span>
       </a>
-      <nav class="header-actions" aria-label="Project">
+      <nav class="header-actions" aria-label={copy.project}>
         <details class="language-menu">
           <summary>{locale.code.toUpperCase()}</summary>
           <div>
@@ -299,14 +297,14 @@ const structuredData = {
           worker.addEventListener("message", ({ data }: MessageEvent<WorkerReply>) => {
             worker.terminate();
             if (data.error || !data.bytes || !data.certificates) {
-              reject(new Error(data.error || "File P7M non leggibile"));
+              reject(new Error(data.error || "P7M_READ_ERROR"));
             } else {
               resolve({ bytes: data.bytes, certificates: data.certificates });
             }
           });
           worker.addEventListener("error", () => {
             worker.terminate();
-            reject(new Error("Impossibile elaborare il file"));
+            reject(new Error("P7M_PROCESSING_ERROR"));
           });
           file.arrayBuffer()
             .then((bytes) => worker.postMessage(bytes, [bytes]))
@@ -356,15 +354,14 @@ const structuredData = {
         const download = card.querySelector<HTMLAnchorElement>(".download")!;
         download.href = url;
         download.download = name;
-        card.querySelector<HTMLElement>(".signer-count")!.textContent =
-          `${certificates.length} ${certificates.length === 1 ? copy.signer : copy.signers}`;
+        card.querySelector<HTMLElement>(".signer-count")!.textContent = String(certificates.length);
 
         const signers = card.querySelector<HTMLElement>(".signers")!;
         signers.replaceChildren(
           ...(certificates.length
             ? certificates.map((certificate) => {
                 const item = document.createElement("p");
-                item.textContent = certificate.name;
+                item.textContent = certificate.name || copy.signerUnknown;
                 return item;
               })
             : [Object.assign(document.createElement("p"), { textContent: copy.noCertificate })]),
@@ -384,12 +381,12 @@ const structuredData = {
         if (content.type === "application/pdf") {
           const frame = document.createElement("iframe");
           frame.src = url;
-          frame.title = `Anteprima di ${name}`;
+          frame.title = copy.preview.replace("{name}", name);
           preview.append(frame);
         } else if (content.type.startsWith("image/")) {
           const image = document.createElement("img");
           image.src = url;
-          image.alt = `Anteprima di ${name}`;
+          image.alt = copy.preview.replace("{name}", name);
           preview.append(image);
         } else if (content.type === "application/xml") {
           const code = document.createElement("pre");
@@ -408,10 +405,9 @@ const structuredData = {
 
       const friendlyError = (error: unknown) => {
         const message = error instanceof Error ? error.message : "";
-        if (message === copy.extension || message === copy.empty || message.includes("troppe firme")) return message;
-        if (message.includes("contenuto non trovato")) {
-          return copy.noDocument;
-        }
+        if (message === copy.extension || message === copy.empty) return message;
+        if (message === "P7M_TOO_MANY_NESTED_SIGNATURES") return copy.nestedSignatures;
+        if (message === "P7M_NO_EMBEDDED_DOCUMENT") return copy.noDocument;
         return copy.invalid;
       };
 
@@ -419,7 +415,8 @@ const structuredData = {
         objectUrls.splice(0).forEach(URL.revokeObjectURL);
         results.replaceChildren();
         dropZone.hidden = true;
-        status.textContent = `${copy.opening} ${files.length} file…`;
+        status.textContent = (files.length === 1 ? copy.opening : copy.openingMany)
+          .replace("{count}", String(files.length));
 
         let failures = 0;
         for (const file of files) {
@@ -436,7 +433,7 @@ const structuredData = {
         }
 
         status.textContent = failures
-          ? `${failures} ${copy.failed}`
+          ? (failures === 1 ? copy.failed : copy.failedMany).replace("{count}", String(failures))
           : "";
         if (failures === files.length) {
           input.value = "";

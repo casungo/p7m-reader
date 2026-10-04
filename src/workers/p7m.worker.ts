@@ -6,7 +6,7 @@ self.addEventListener("message", (event: MessageEvent<ArrayBuffer>) => {
     self.postMessage({ bytes: bytes.buffer, certificates }, { transfer: [bytes.buffer] });
   } catch (error) {
     self.postMessage({
-      error: error instanceof Error ? error.message : "File P7M non leggibile",
+      error: error instanceof Error ? error.message : "P7M_READ_ERROR",
     });
   }
 });

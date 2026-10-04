@@ -42,6 +42,13 @@ export type Copy = {
   allReleases: string;
   versionLabel: string;
   container: string;
+  project: string;
+  preview: string;
+  nestedSignatures: string;
+  openingMany: string;
+  failedMany: string;
+  signerUnknown: string;
+  socialImageAlt: string;
 };
 
 export type Locale = {
@@ -79,12 +86,16 @@ const en: Copy = {
   warning: "P7M Reader extracts the document and shows readable certificate data. It does not check integrity, revocation, timestamps or legal validity: do not use this information as proof of authenticity.",
   noPreview: "Preview unavailable. You can download the extracted content.", demoError: "Unable to load the demo file",
   invalid: "it does not appear to be a valid P7M file or it is damaged", noDocument: "the signature contains no embedded document",
-  empty: "the file is empty", extension: "choose a file with a .p7m extension", opening: "Opening", failed: "file could not be opened",
+  empty: "the file is empty", extension: "choose a file with a .p7m extension", opening: "Opening {count} file…", failed: "{count} file could not be opened",
   signer: "signer", signers: "signers", noCertificate: "No readable certificate", unavailable: "Unavailable",
   viewer: "P7M viewer", results: "Extracted files", signerCountLabel: "Number of signers", signerNamesLabel: "Signers",
   validityLabel: "Certificate validity", properties: ["File last modified", "Author", "Created", "Modified", "Application", "PDF producer", "Page size"],
   newLabel: "New", allReleases: "All releases", versionLabel: "Version",
   container: "P7M container",
+  project: "Project", preview: "Preview of {name}", nestedSignatures: "The file contains too many nested signatures",
+  openingMany: "Opening {count} files…", failedMany: "{count} files could not be opened",
+  signerUnknown: "Signer not identified",
+  socialImageAlt: "P7M Reader. Open P7M files and extract the document locally. No upload, no account.",
 };
 
 const de: Copy = {
@@ -104,7 +115,7 @@ const de: Copy = {
   source: "Quellcode", donate: "Entwickler unterstützen", theme: "Design wechseln", change: "Datei wechseln", close: "Schließen",
   signatureInfo: "Signaturinformationen", warningTitle: "Achtung: Die Signatur wird nicht geprüft.", noPreview: "Keine Vorschau verfügbar. Der extrahierte Inhalt kann heruntergeladen werden.",
   demoError: "Demo-Datei konnte nicht geladen werden", invalid: "keine gültige P7M-Datei oder beschädigt", noDocument: "die Signatur enthält kein eingebettetes Dokument",
-  empty: "die Datei ist leer", extension: "eine Datei mit der Endung .p7m auswählen", opening: "Öffne", failed: "Datei konnte nicht geöffnet werden", signer: "Unterzeichner", signers: "Unterzeichner", noCertificate: "Kein lesbares Zertifikat", unavailable: "Nicht verfügbar",
+  empty: "die Datei ist leer", extension: "eine Datei mit der Endung .p7m auswählen", opening: "Öffne {count} Datei…", failed: "{count} Datei konnte nicht geöffnet werden", signer: "Unterzeichner", signers: "Unterzeichner", noCertificate: "Kein lesbares Zertifikat", unavailable: "Nicht verfügbar",
   viewer: "P7M-Anzeige", results: "Extrahierte Dateien", signerCountLabel: "Anzahl der Unterzeichner", signerNamesLabel: "Unterzeichner",
   validityLabel: "Zertifikatsgültigkeit", properties: ["Datei zuletzt geändert", "Autor", "Erstellt", "Geändert", "Anwendung", "PDF-Produzent", "Seitengröße"],
   newLabel: "Neu", allReleases: "Alle Versionen", versionLabel: "Version",
@@ -134,12 +145,16 @@ const it: Copy = {
   warning: "P7M Reader estrae il documento e mostra i dati leggibili dei certificati. Non controlla integrità, revoca, marche temporali o validità legale: non usare queste informazioni come prova dell’autenticità del file.",
   noPreview: "Anteprima non disponibile. Puoi scaricare il contenuto estratto.", demoError: "Impossibile caricare il file demo",
   invalid: "non sembra un P7M valido oppure è danneggiato", noDocument: "la firma non contiene un documento incorporato", empty: "il file è vuoto",
-  extension: "seleziona un file con estensione .p7m", opening: "Apro", failed: "file non aperto", signer: "firmatario", signers: "firmatari",
+  extension: "seleziona un file con estensione .p7m", opening: "Apro {count} file…", failed: "{count} file non aperto", signer: "firmatario", signers: "firmatari",
   noCertificate: "Nessun certificato leggibile", unavailable: "Non disponibile",
   viewer: "Visualizzatore P7M", results: "File estratti", signerCountLabel: "Numero di firmatari", signerNamesLabel: "Firmatari",
   validityLabel: "Validità certificato", properties: ["Ultima modifica file", "Autore", "Creato il", "Modificato il", "Applicazione", "Produttore PDF", "Dimensioni pagina"],
   newLabel: "Novità", allReleases: "Tutti i rilasci", versionLabel: "Versione",
   container: "Contenitore P7M",
+  project: "Progetto", preview: "Anteprima di {name}", nestedSignatures: "Il file contiene troppe firme annidate",
+  signerUnknown: "Firmatario non indicato",
+  socialImageAlt: "P7M Reader. Apri file P7M ed estrai il documento localmente. Nessun upload, nessun account.",
+  openingMany: "Apro {count} file…", failedMany: "{count} file non aperti",
 };
 
 const translated = (overrides: Partial<Copy>): Copy => ({ ...en, ...overrides });
@@ -218,6 +233,12 @@ const ptPT = translated({
   ...ptBR, metaTitle: "P7M Reader – Abra e extraia ficheiros P7M online", metaDescription: "Abra e extraia ficheiros P7M localmente no navegador. Sem carregamentos nem conta: o documento fica no seu dispositivo.",
   heroTitle: "Leia um ficheiro P7M. O documento continua a ser seu.", intro: "Veja o conteúdo de um ficheiro .p7m diretamente no navegador. PDF, XML e imagens ficam no seu dispositivo.",
   choose: "Escolher ficheiro P7M", demo: "Testar ficheiro de demonstração", drop: "Ou arraste e largue o ficheiro aqui", download: "Descarregar documento", change: "Mudar ficheiro",
+  faqs: [
+    { question: "Os ficheiros são enviados para um servidor?", answer: "Não. A leitura, a extração e a pré-visualização são feitas no navegador. Registamos apenas eventos anónimos de sucesso ou erro, nunca os nomes nem o conteúdo dos ficheiros." },
+    { question: "A validade jurídica da assinatura é verificada?", answer: "Não. São apresentados os dados legíveis do certificado, mas não são verificados a integridade, a revogação, as marcas temporais nem a validade jurídica." },
+    { question: "Que conteúdos posso pré-visualizar?", answer: "PDF, XML e imagens PNG, JPEG e GIF. Os restantes conteúdos podem ser extraídos e descarregados como ficheiros binários." },
+    { question: "Funciona sem ligação à Internet?", answer: "Sim. Após a primeira visita, o serviço pode ser novamente aberto sem ligação à Internet no mesmo navegador." },
+  ],
 });
 const fr = translated({
   metaTitle: "P7M Reader – Ouvrir et extraire des fichiers P7M en ligne", metaDescription: "Ouvrez et extrayez les fichiers P7M localement dans le navigateur. Aucun envoi, aucun compte.",
@@ -290,21 +311,296 @@ const ru = translated({
   ],
 });
 
+type LocalizedUi = Pick<Copy,
+  | "signatureInfo" | "warningTitle" | "warning" | "noPreview" | "demoError" | "invalid" | "noDocument"
+  | "empty" | "extension" | "opening" | "openingMany" | "failed" | "failedMany" | "signer" | "signers"
+  | "noCertificate" | "unavailable" | "viewer" | "results" | "signerCountLabel" | "signerNamesLabel"
+  | "validityLabel" | "properties" | "newLabel" | "allReleases" | "versionLabel" | "container"
+  | "project" | "preview" | "nestedSignatures"
+  | "signerUnknown" | "socialImageAlt"
+>;
+
+type FaqItem = Copy["faqs"][number];
+
+const localizedFaqs: Record<string, FaqItem[]> = {
+  de: [
+    { question: "Was ist eine P7M-Datei?", answer: "Eine .p7m-Datei ist ein digital signierter PKCS#7-Container. Sie kann ein PDF, XML oder ein anderes Dokument enthalten. P7M Reader extrahiert den eingebetteten Inhalt, ohne die Signatur zu prüfen." },
+    { question: "Wie wandle ich P7M in PDF um?", answer: "Wählen Sie die P7M-Datei aus, öffnen Sie die PDF-Vorschau und klicken Sie auf „Dokument herunterladen“. Dadurch wird das ursprüngliche PDF extrahiert. Enthält die P7M-Datei XML oder ein anderes Format, lädt P7M Reader dieses Format herunter und wandelt es nicht in PDF um." },
+    { question: "Wie öffne ich eine .pdf.p7m-Datei?", answer: "Wählen Sie die .pdf.p7m-Datei aus oder ziehen Sie sie hierher. P7M Reader öffnet das PDF im signierten Container. Das Umbenennen der Datei in .pdf extrahiert das Dokument nicht." },
+    { question: "Kann ich P7M-Dateien auf dem Smartphone öffnen?", answer: "Ja. Wählen Sie die .p7m-Datei im Browser auf Ihrem Android-Smartphone oder iPhone aus. Ein Konto ist nicht erforderlich. Die PDF-Vorschau hängt vom Browser ab. Sie können das extrahierte Dokument auch herunterladen." },
+  ],
+  "pt-BR": [
+    { question: "O que é um arquivo P7M?", answer: "Um arquivo .p7m é um contêiner PKCS#7 assinado digitalmente. Ele pode conter um PDF, XML ou outro documento. O P7M Reader extrai o conteúdo incorporado sem verificar a assinatura." },
+    { question: "Como converter P7M para PDF?", answer: "Escolha o arquivo P7M, visualize o PDF incorporado e selecione Baixar documento. Isso extrai o PDF original. Se o P7M contiver XML ou outro formato, o P7M Reader baixará esse formato sem convertê-lo para PDF." },
+    { question: "Como abrir um arquivo .pdf.p7m?", answer: "Selecione ou arraste o arquivo .pdf.p7m para cá. O P7M Reader abre o PDF dentro do contêiner assinado. Renomear o arquivo para .pdf não extrai o documento." },
+    { question: "Posso abrir arquivos P7M no celular?", answer: "Sim. Selecione o arquivo .p7m no navegador do seu celular Android ou iPhone. Não é necessário ter uma conta. A pré-visualização de PDF depende do navegador; você também pode baixar o documento extraído." },
+  ],
+  id: [
+    { question: "Apa itu file P7M?", answer: "File .p7m adalah kontainer PKCS#7 yang ditandatangani secara digital. File ini dapat berisi PDF, XML, atau dokumen lain. P7M Reader mengekstrak konten di dalamnya tanpa memverifikasi tanda tangan." },
+    { question: "Bagaimana cara mengubah P7M menjadi PDF?", answer: "Pilih file P7M, pratinjau PDF di dalamnya, lalu pilih Unduh dokumen. Cara ini mengekstrak PDF aslinya. Jika P7M berisi XML atau format lain, P7M Reader akan mengunduh format tersebut dan tidak mengubahnya menjadi PDF." },
+    { question: "Bagaimana cara membuka file .pdf.p7m?", answer: "Pilih atau seret file .pdf.p7m ke sini. P7M Reader membuka PDF di dalam kontainer bertanda tangan. Mengganti nama file menjadi .pdf tidak mengekstrak dokumen." },
+    { question: "Bisakah saya membuka file P7M di ponsel?", answer: "Bisa. Pilih file .p7m dari ponsel Android atau iPhone melalui browser. Anda tidak perlu akun. Pratinjau PDF bergantung pada browser; Anda juga dapat mengunduh dokumen hasil ekstraksi." },
+  ],
+  vi: [
+    { question: "Tệp P7M là gì?", answer: "Tệp .p7m là vùng chứa PKCS#7 được ký số. Tệp có thể chứa PDF, XML hoặc tài liệu khác. P7M Reader trích xuất nội dung được nhúng mà không xác minh chữ ký." },
+    { question: "Làm cách nào để chuyển P7M sang PDF?", answer: "Chọn tệp P7M, xem trước PDF bên trong rồi chọn Tải tài liệu. Thao tác này trích xuất PDF gốc. Nếu P7M chứa XML hoặc định dạng khác, P7M Reader sẽ tải xuống định dạng đó chứ không chuyển sang PDF." },
+    { question: "Làm cách nào để mở tệp .pdf.p7m?", answer: "Chọn hoặc kéo tệp .pdf.p7m vào đây. P7M Reader mở PDF bên trong vùng chứa đã ký. Đổi tên tệp thành .pdf không trích xuất tài liệu." },
+    { question: "Tôi có thể mở tệp P7M trên điện thoại không?", answer: "Có. Chọn tệp .p7m trên điện thoại Android hoặc iPhone bằng trình duyệt. Bạn không cần tài khoản. Khả năng xem trước PDF tùy thuộc vào trình duyệt; bạn cũng có thể tải tài liệu đã trích xuất." },
+  ],
+  es: [
+    { question: "¿Qué es un archivo P7M?", answer: "Un archivo .p7m es un contenedor PKCS#7 firmado digitalmente. Puede incluir un PDF, XML u otro documento. P7M Reader extrae el contenido integrado sin verificar la firma." },
+    { question: "¿Cómo convierto P7M a PDF?", answer: "Elige el archivo P7M, previsualiza el PDF incluido y selecciona Descargar documento. Así se extrae el PDF original. Si el P7M contiene XML u otro formato, P7M Reader descarga ese formato y no lo convierte a PDF." },
+    { question: "¿Cómo abro un archivo .pdf.p7m?", answer: "Selecciona o arrastra aquí el archivo .pdf.p7m. P7M Reader abre el PDF dentro del contenedor firmado. Cambiar la extensión a .pdf no extrae el documento." },
+    { question: "¿Puedo abrir archivos P7M en el móvil?", answer: "Sí. Elige el archivo .p7m desde el navegador de tu teléfono Android o iPhone. No necesitas una cuenta. La vista previa del PDF depende del navegador; también puedes descargar el documento extraído." },
+  ],
+  ja: [
+    { question: "P7Mファイルとは何ですか？", answer: ".p7mファイルはデジタル署名付きのPKCS#7コンテナです。PDF、XML、その他の文書を含むことがあります。P7M Readerは署名を検証せずに、格納された内容を抽出します。" },
+    { question: "P7MをPDFに変換するには？", answer: "P7Mファイルを選び、格納されたPDFをプレビューして「文書をダウンロード」を選択します。元のPDFが抽出されます。XMLなど別の形式が含まれている場合は、その形式のままダウンロードされ、PDFには変換されません。" },
+    { question: ".pdf.p7mファイルを開くには？", answer: ".pdf.p7mファイルを選択するか、ここにドラッグします。P7M Readerが署名付きコンテナ内のPDFを開きます。拡張子を.pdfに変更しても文書は抽出されません。" },
+    { question: "スマートフォンでP7Mファイルを開けますか？", answer: "はい。AndroidスマートフォンまたはiPhoneのブラウザから.p7mファイルを選択してください。アカウントは不要です。PDFをプレビューできるかはブラウザによります。抽出した文書をダウンロードすることもできます。" },
+  ],
+  "pt-PT": [
+    { question: "O que é um ficheiro P7M?", answer: "Um ficheiro .p7m é um contentor PKCS#7 assinado digitalmente. Pode conter um PDF, XML ou outro documento. O P7M Reader extrai o conteúdo incorporado sem verificar a assinatura." },
+    { question: "Como converter P7M para PDF?", answer: "Escolha o ficheiro P7M, pré-visualize o PDF incorporado e selecione Descarregar documento. Isto extrai o PDF original. Se o P7M contiver XML ou outro formato, o P7M Reader descarrega esse formato sem o converter para PDF." },
+    { question: "Como abrir um ficheiro .pdf.p7m?", answer: "Selecione ou arraste o ficheiro .pdf.p7m para aqui. O P7M Reader abre o PDF dentro do contentor assinado. Mudar a extensão do ficheiro para .pdf não extrai o documento." },
+    { question: "Posso abrir ficheiros P7M no telemóvel?", answer: "Sim. Selecione o ficheiro .p7m no navegador do seu telemóvel Android ou iPhone. Não precisa de uma conta. A pré-visualização de PDF depende do navegador; também pode descarregar o documento extraído." },
+  ],
+  fr: [
+    { question: "Qu’est-ce qu’un fichier P7M ?", answer: "Un fichier .p7m est un conteneur PKCS#7 signé numériquement. Il peut contenir un PDF, un fichier XML ou un autre document. P7M Reader extrait le contenu intégré sans vérifier la signature." },
+    { question: "Comment convertir un P7M en PDF ?", answer: "Choisissez le fichier P7M, affichez l’aperçu du PDF intégré, puis sélectionnez Télécharger le document. Le PDF d’origine est ainsi extrait. Si le P7M contient du XML ou un autre format, P7M Reader télécharge ce format sans le convertir en PDF." },
+    { question: "Comment ouvrir un fichier .pdf.p7m ?", answer: "Sélectionnez ou faites glisser le fichier .pdf.p7m ici. P7M Reader ouvre le PDF contenu dans le conteneur signé. Renommer le fichier en .pdf n’extrait pas le document." },
+    { question: "Puis-je ouvrir des fichiers P7M sur mon téléphone ?", answer: "Oui. Sélectionnez le fichier .p7m dans le navigateur de votre téléphone Android ou iPhone. Aucun compte n’est nécessaire. L’aperçu PDF dépend du navigateur ; vous pouvez aussi télécharger le document extrait." },
+  ],
+  nl: [
+    { question: "Wat is een P7M-bestand?", answer: "Een .p7m-bestand is een digitaal ondertekende PKCS#7-container. Het kan een PDF, XML of een ander document bevatten. P7M Reader pakt de ingesloten inhoud uit zonder de handtekening te controleren." },
+    { question: "Hoe zet ik P7M om naar PDF?", answer: "Kies het P7M-bestand, bekijk de ingesloten PDF en kies Document downloaden. Zo pak je de originele PDF uit. Bevat het P7M-bestand XML of een ander formaat, dan downloadt P7M Reader dat formaat zonder het naar PDF om te zetten." },
+    { question: "Hoe open ik een .pdf.p7m-bestand?", answer: "Selecteer het .pdf.p7m-bestand of sleep het hierheen. P7M Reader opent de PDF in de ondertekende container. De bestandsextensie wijzigen in .pdf pakt het document niet uit." },
+    { question: "Kan ik P7M-bestanden op mijn telefoon openen?", answer: "Ja. Kies het .p7m-bestand in de browser op je Android-telefoon of iPhone. Een account is niet nodig. PDF-voorbeelden zijn afhankelijk van de browser; je kunt het uitgepakte document ook downloaden." },
+  ],
+  pl: [
+    { question: "Czym jest plik P7M?", answer: "Plik .p7m to cyfrowo podpisany kontener PKCS#7. Może zawierać plik PDF, XML lub inny dokument. P7M Reader wyodrębnia osadzoną zawartość bez weryfikowania podpisu." },
+    { question: "Jak przekonwertować P7M na PDF?", answer: "Wybierz plik P7M, wyświetl osadzony PDF i wybierz Pobierz dokument. Spowoduje to wyodrębnienie oryginalnego pliku PDF. Jeśli P7M zawiera XML lub inny format, P7M Reader pobierze go bez konwertowania na PDF." },
+    { question: "Jak otworzyć plik .pdf.p7m?", answer: "Wybierz plik .pdf.p7m lub przeciągnij go tutaj. P7M Reader otworzy plik PDF z podpisanego kontenera. Zmiana rozszerzenia na .pdf nie wyodrębnia dokumentu." },
+    { question: "Czy mogę otwierać pliki P7M na telefonie?", answer: "Tak. Wybierz plik .p7m w przeglądarce na telefonie z Androidem lub iPhonie. Konto nie jest potrzebne. Podgląd PDF zależy od przeglądarki; możesz też pobrać wyodrębniony dokument." },
+  ],
+  uk: [
+    { question: "Що таке файл P7M?", answer: "Файл .p7m — це контейнер PKCS#7 із цифровим підписом. Він може містити PDF, XML або інший документ. P7M Reader видобуває вбудований вміст без перевірки підпису." },
+    { question: "Як перетворити P7M на PDF?", answer: "Виберіть файл P7M, перегляньте вбудований PDF і натисніть «Завантажити документ». Так ви видобудете оригінальний PDF. Якщо P7M містить XML або інший формат, P7M Reader завантажить його без перетворення на PDF." },
+    { question: "Як відкрити файл .pdf.p7m?", answer: "Виберіть файл .pdf.p7m або перетягніть його сюди. P7M Reader відкриє PDF у підписаному контейнері. Зміна розширення на .pdf не видобуває документ." },
+    { question: "Чи можна відкривати файли P7M на телефоні?", answer: "Так. Виберіть файл .p7m у браузері на телефоні Android або iPhone. Обліковий запис не потрібен. Попередній перегляд PDF залежить від браузера; видобутий документ також можна завантажити." },
+  ],
+  ru: [
+    { question: "Что такое файл P7M?", answer: "Файл .p7m — это контейнер PKCS#7 с цифровой подписью. Он может содержать PDF, XML или другой документ. P7M Reader извлекает встроенное содержимое, не проверяя подпись." },
+    { question: "Как преобразовать P7M в PDF?", answer: "Выберите файл P7M, откройте предварительный просмотр встроенного PDF и нажмите «Скачать документ». Так извлекается исходный PDF. Если в P7M содержится XML или другой формат, P7M Reader скачает его без преобразования в PDF." },
+    { question: "Как открыть файл .pdf.p7m?", answer: "Выберите файл .pdf.p7m или перетащите его сюда. P7M Reader откроет PDF внутри контейнера с подписью. Переименование файла в .pdf не извлекает документ." },
+    { question: "Можно ли открывать файлы P7M на телефоне?", answer: "Да. Выберите файл .p7m в браузере на телефоне Android или iPhone. Учётная запись не нужна. Возможность просмотра PDF зависит от браузера; извлечённый документ можно скачать." },
+  ],
+};
+
+const localizedUi: Record<string, LocalizedUi> = {
+  de: {
+    signatureInfo: "Signaturinformationen", warningTitle: "Achtung: Die Signatur wird nicht geprüft.",
+    warning: "P7M Reader extrahiert das Dokument und zeigt lesbare Zertifikatsdaten an. Integrität, Widerruf, Zeitstempel und Rechtsgültigkeit werden nicht geprüft. Verwenden Sie diese Angaben nicht als Echtheitsnachweis.",
+    noPreview: "Keine Vorschau verfügbar. Sie können den extrahierten Inhalt herunterladen.", demoError: "Die Demodatei konnte nicht geladen werden",
+    invalid: "ist keine gültige P7M-Datei oder ist beschädigt", noDocument: "die Signatur enthält kein eingebettetes Dokument",
+    empty: "die Datei ist leer", extension: "wählen Sie eine Datei mit der Endung .p7m",
+    opening: "Öffne {count} Datei…", openingMany: "Öffne {count} Dateien…",
+    failed: "{count} Datei konnte nicht geöffnet werden", failedMany: "{count} Dateien konnten nicht geöffnet werden",
+    signer: "Unterzeichner", signers: "Unterzeichner", noCertificate: "Kein lesbares Zertifikat", unavailable: "Nicht verfügbar",
+    viewer: "P7M-Viewer", results: "Extrahierte Dateien", signerCountLabel: "Anzahl der Unterzeichner", signerNamesLabel: "Unterzeichner",
+    validityLabel: "Gültigkeit des Zertifikats", properties: ["Zuletzt geändert", "Autor", "Erstellt", "Geändert", "Anwendung", "PDF-Erzeuger", "Seitengröße"],
+    newLabel: "Neu", allReleases: "Alle Versionen", versionLabel: "Version", container: "P7M-Container",
+    project: "Projekt", preview: "Vorschau von {name}", nestedSignatures: "Die Datei enthält zu viele verschachtelte Signaturen",
+    signerUnknown: "Unterzeichner nicht angegeben", socialImageAlt: "P7M Reader. P7M-Dateien lokal öffnen und Inhalte extrahieren. Kein Upload, kein Konto.",
+  },
+  "pt-BR": {
+    signatureInfo: "Informações da assinatura", warningTitle: "Atenção: a assinatura não é verificada.",
+    warning: "O P7M Reader extrai o documento e mostra os dados legíveis do certificado. Não verifica integridade, revogação, carimbos de tempo nem validade jurídica. Não use essas informações como prova de autenticidade.",
+    noPreview: "Pré-visualização indisponível. Você pode baixar o conteúdo extraído.", demoError: "Não foi possível carregar o arquivo de demonstração",
+    invalid: "não parece ser um arquivo P7M válido ou está danificado", noDocument: "a assinatura não contém um documento incorporado",
+    empty: "o arquivo está vazio", extension: "selecione um arquivo com a extensão .p7m",
+    opening: "Abrindo {count} arquivo…", openingMany: "Abrindo {count} arquivos…",
+    failed: "{count} arquivo não pôde ser aberto", failedMany: "{count} arquivos não puderam ser abertos",
+    signer: "signatário", signers: "signatários", noCertificate: "Nenhum certificado legível", unavailable: "Indisponível",
+    viewer: "Visualizador P7M", results: "Arquivos extraídos", signerCountLabel: "Número de signatários", signerNamesLabel: "Signatários",
+    validityLabel: "Validade do certificado", properties: ["Última modificação do arquivo", "Autor", "Criado em", "Modificado em", "Aplicativo", "Produtor do PDF", "Tamanho da página"],
+    newLabel: "Novo", allReleases: "Todas as versões", versionLabel: "Versão", container: "Contêiner P7M",
+    project: "Projeto", preview: "Pré-visualização de {name}", nestedSignatures: "O arquivo contém assinaturas aninhadas demais",
+    signerUnknown: "Signatário não informado", socialImageAlt: "P7M Reader. Abra arquivos P7M e extraia o conteúdo localmente. Sem upload, sem conta.",
+  },
+  id: {
+    signatureInfo: "Informasi tanda tangan", warningTitle: "Perhatian: tanda tangan tidak diverifikasi.",
+    warning: "P7M Reader mengekstrak dokumen dan menampilkan data sertifikat yang dapat dibaca. Aplikasi ini tidak memeriksa integritas, pencabutan, stempel waktu, atau keabsahan hukum. Jangan gunakan informasi ini sebagai bukti keaslian.",
+    noPreview: "Pratinjau tidak tersedia. Anda dapat mengunduh konten hasil ekstraksi.", demoError: "File demo tidak dapat dimuat",
+    invalid: "tampaknya bukan file P7M yang valid atau file rusak", noDocument: "tanda tangan tidak berisi dokumen tertanam",
+    empty: "file kosong", extension: "pilih file dengan ekstensi .p7m",
+    opening: "Membuka {count} file…", openingMany: "Membuka {count} file…",
+    failed: "{count} file tidak dapat dibuka", failedMany: "{count} file tidak dapat dibuka",
+    signer: "penanda tangan", signers: "penanda tangan", noCertificate: "Tidak ada sertifikat yang dapat dibaca", unavailable: "Tidak tersedia",
+    viewer: "Penampil P7M", results: "File hasil ekstraksi", signerCountLabel: "Jumlah penanda tangan", signerNamesLabel: "Penanda tangan",
+    validityLabel: "Masa berlaku sertifikat", properties: ["Terakhir diubah", "Penulis", "Dibuat", "Diubah", "Aplikasi", "Produsen PDF", "Ukuran halaman"],
+    newLabel: "Baru", allReleases: "Semua rilis", versionLabel: "Versi", container: "Kontainer P7M",
+    project: "Proyek", preview: "Pratinjau {name}", nestedSignatures: "File berisi terlalu banyak tanda tangan bertingkat",
+    signerUnknown: "Penanda tangan tidak diketahui", socialImageAlt: "P7M Reader. Buka file P7M dan ekstrak isinya secara lokal. Tanpa unggahan atau akun.",
+  },
+  vi: {
+    signatureInfo: "Thông tin chữ ký", warningTitle: "Lưu ý: chữ ký chưa được xác minh.",
+    warning: "P7M Reader trích xuất tài liệu và hiển thị dữ liệu chứng thư có thể đọc được. Công cụ không kiểm tra tính toàn vẹn, trạng thái thu hồi, dấu thời gian hay giá trị pháp lý. Không dùng thông tin này làm bằng chứng xác thực.",
+    noPreview: "Không thể xem trước. Bạn có thể tải nội dung đã trích xuất.", demoError: "Không thể tải tệp mẫu",
+    invalid: "có vẻ không phải tệp P7M hợp lệ hoặc tệp đã bị hỏng", noDocument: "chữ ký không chứa tài liệu được nhúng",
+    empty: "tệp trống", extension: "chọn tệp có phần mở rộng .p7m",
+    opening: "Đang mở {count} tệp…", openingMany: "Đang mở {count} tệp…",
+    failed: "Không thể mở {count} tệp", failedMany: "Không thể mở {count} tệp",
+    signer: "người ký", signers: "người ký", noCertificate: "Không có chứng thư đọc được", unavailable: "Không có sẵn",
+    viewer: "Trình xem P7M", results: "Tệp đã trích xuất", signerCountLabel: "Số người ký", signerNamesLabel: "Người ký",
+    validityLabel: "Thời hạn hiệu lực của chứng thư", properties: ["Lần sửa đổi gần nhất", "Tác giả", "Ngày tạo", "Ngày sửa đổi", "Ứng dụng", "Trình tạo PDF", "Kích thước trang"],
+    newLabel: "Mới", allReleases: "Tất cả bản phát hành", versionLabel: "Phiên bản", container: "Tệp chứa P7M",
+    project: "Dự án", preview: "Bản xem trước của {name}", nestedSignatures: "Tệp chứa quá nhiều chữ ký lồng nhau",
+    signerUnknown: "Không rõ người ký", socialImageAlt: "P7M Reader. Mở tệp P7M và trích xuất nội dung ngay trên thiết bị. Không tải lên, không cần tài khoản.",
+  },
+  es: {
+    signatureInfo: "Información de la firma", warningTitle: "Aviso: la firma no se verifica.",
+    warning: "P7M Reader extrae el documento y muestra los datos legibles del certificado. No comprueba la integridad, la revocación, las marcas de tiempo ni la validez legal. No uses estos datos como prueba de autenticidad.",
+    noPreview: "Vista previa no disponible. Puedes descargar el contenido extraído.", demoError: "No se pudo cargar el archivo de ejemplo",
+    invalid: "no parece ser un archivo P7M válido o está dañado", noDocument: "la firma no contiene ningún documento integrado",
+    empty: "el archivo está vacío", extension: "elige un archivo con la extensión .p7m",
+    opening: "Abriendo {count} archivo…", openingMany: "Abriendo {count} archivos…",
+    failed: "No se pudo abrir {count} archivo", failedMany: "No se pudieron abrir {count} archivos",
+    signer: "firmante", signers: "firmantes", noCertificate: "No hay ningún certificado legible", unavailable: "No disponible",
+    viewer: "Visor P7M", results: "Archivos extraídos", signerCountLabel: "Número de firmantes", signerNamesLabel: "Firmantes",
+    validityLabel: "Validez del certificado", properties: ["Última modificación", "Autor", "Creado", "Modificado", "Aplicación", "Productor del PDF", "Tamaño de página"],
+    newLabel: "Nuevo", allReleases: "Todas las versiones", versionLabel: "Versión", container: "Contenedor P7M",
+    project: "Proyecto", preview: "Vista previa de {name}", nestedSignatures: "El archivo contiene demasiadas firmas anidadas",
+    signerUnknown: "Firmante no identificado", socialImageAlt: "P7M Reader. Abre archivos P7M y extrae su contenido localmente. Sin subidas ni cuentas.",
+  },
+  ja: {
+    signatureInfo: "署名情報", warningTitle: "注意：署名は検証されていません。",
+    warning: "P7M Readerは文書を抽出し、読み取り可能な証明書データを表示します。署名の完全性、失効、タイムスタンプ、法的有効性は検証しません。この情報を真正性の証明として使用しないでください。",
+    noPreview: "プレビューできません。抽出した内容をダウンロードできます。", demoError: "デモファイルを読み込めませんでした",
+    invalid: "有効なP7Mファイルではないか、破損しているようです", noDocument: "署名に埋め込み文書が含まれていません",
+    empty: "ファイルが空です", extension: "拡張子が.p7mのファイルを選択してください",
+    opening: "{count}個のファイルを開いています…", openingMany: "{count}個のファイルを開いています…",
+    failed: "{count}個のファイルを開けませんでした", failedMany: "{count}個のファイルを開けませんでした",
+    signer: "署名者", signers: "署名者", noCertificate: "読み取り可能な証明書がありません", unavailable: "利用できません",
+    viewer: "P7Mビューアー", results: "抽出したファイル", signerCountLabel: "署名者数", signerNamesLabel: "署名者",
+    validityLabel: "証明書の有効期間", properties: ["最終更新日時", "作成者", "作成日時", "更新日時", "アプリケーション", "PDF作成ソフト", "ページサイズ"],
+    newLabel: "新着", allReleases: "すべてのリリース", versionLabel: "バージョン", container: "P7Mコンテナ",
+    project: "プロジェクト", preview: "{name}のプレビュー", nestedSignatures: "ファイルに含まれる署名の入れ子が多すぎます",
+    signerUnknown: "署名者不明", socialImageAlt: "P7M Reader。P7Mファイルを開いて内容を端末内で抽出します。アップロードやアカウントは不要です。",
+  },
+  "pt-PT": {
+    signatureInfo: "Informações sobre a assinatura", warningTitle: "Atenção: a assinatura não é verificada.",
+    warning: "O P7M Reader extrai o documento e apresenta os dados legíveis do certificado. Não verifica a integridade, a revogação, as marcas temporais nem a validade jurídica. Não utilize estas informações como prova de autenticidade.",
+    noPreview: "Pré-visualização indisponível. Pode descarregar o conteúdo extraído.", demoError: "Não foi possível carregar o ficheiro de demonstração",
+    invalid: "não parece ser um ficheiro P7M válido ou está danificado", noDocument: "a assinatura não contém um documento incorporado",
+    empty: "o ficheiro está vazio", extension: "selecione um ficheiro com a extensão .p7m",
+    opening: "A abrir {count} ficheiro…", openingMany: "A abrir {count} ficheiros…",
+    failed: "Não foi possível abrir {count} ficheiro", failedMany: "Não foi possível abrir {count} ficheiros",
+    signer: "signatário", signers: "signatários", noCertificate: "Não existe nenhum certificado legível", unavailable: "Indisponível",
+    viewer: "Visualizador P7M", results: "Ficheiros extraídos", signerCountLabel: "Número de signatários", signerNamesLabel: "Signatários",
+    validityLabel: "Validade do certificado", properties: ["Última modificação", "Autor", "Criado em", "Modificado em", "Aplicação", "Produtor do PDF", "Tamanho da página"],
+    newLabel: "Novo", allReleases: "Todas as versões", versionLabel: "Versão", container: "Contentor P7M",
+    project: "Projeto", preview: "Pré-visualização de {name}", nestedSignatures: "O ficheiro contém demasiadas assinaturas aninhadas",
+    signerUnknown: "Signatário não indicado", socialImageAlt: "P7M Reader. Abra ficheiros P7M e extraia o conteúdo localmente. Sem carregamentos nem conta.",
+  },
+  fr: {
+    signatureInfo: "Informations sur la signature", warningTitle: "Attention : la signature n’est pas vérifiée.",
+    warning: "P7M Reader extrait le document et affiche les données lisibles du certificat. Il ne vérifie ni l’intégrité, ni la révocation, ni les horodatages, ni la validité juridique. N’utilisez pas ces informations comme preuve d’authenticité.",
+    noPreview: "Aucun aperçu disponible. Vous pouvez télécharger le contenu extrait.", demoError: "Impossible de charger le fichier de démonstration",
+    invalid: "ne semble pas être un fichier P7M valide ou est endommagé", noDocument: "la signature ne contient aucun document intégré",
+    empty: "le fichier est vide", extension: "choisissez un fichier avec l’extension .p7m",
+    opening: "Ouverture de {count} fichier…", openingMany: "Ouverture de {count} fichiers…",
+    failed: "Impossible d’ouvrir {count} fichier", failedMany: "Impossible d’ouvrir {count} fichiers",
+    signer: "signataire", signers: "signataires", noCertificate: "Aucun certificat lisible", unavailable: "Indisponible",
+    viewer: "Lecteur P7M", results: "Fichiers extraits", signerCountLabel: "Nombre de signataires", signerNamesLabel: "Signataires",
+    validityLabel: "Validité du certificat", properties: ["Dernière modification", "Auteur", "Créé le", "Modifié le", "Application", "Producteur PDF", "Taille de page"],
+    newLabel: "Nouveau", allReleases: "Toutes les versions", versionLabel: "Version", container: "Conteneur P7M",
+    project: "Projet", preview: "Aperçu de {name}", nestedSignatures: "Le fichier contient trop de signatures imbriquées",
+    signerUnknown: "Signataire non identifié", socialImageAlt: "P7M Reader. Ouvrez des fichiers P7M et extrayez leur contenu localement. Aucun envoi, aucun compte.",
+  },
+  nl: {
+    signatureInfo: "Handtekeninggegevens", warningTitle: "Let op: de handtekening is niet gecontroleerd.",
+    warning: "P7M Reader pakt het document uit en toont leesbare certificaatgegevens. De integriteit, intrekking, tijdstempels en juridische geldigheid worden niet gecontroleerd. Gebruik deze informatie niet als bewijs van echtheid.",
+    noPreview: "Voorbeeld niet beschikbaar. U kunt de uitgepakte inhoud downloaden.", demoError: "Het demobestand kon niet worden geladen",
+    invalid: "lijkt geen geldig P7M-bestand te zijn of is beschadigd", noDocument: "de handtekening bevat geen ingesloten document",
+    empty: "het bestand is leeg", extension: "kies een bestand met de extensie .p7m",
+    opening: "Bezig met openen van {count} bestand…", openingMany: "Bezig met openen van {count} bestanden…",
+    failed: "{count} bestand kon niet worden geopend", failedMany: "{count} bestanden konden niet worden geopend",
+    signer: "ondertekenaar", signers: "ondertekenaars", noCertificate: "Geen leesbaar certificaat", unavailable: "Niet beschikbaar",
+    viewer: "P7M-weergave", results: "Uitgepakte bestanden", signerCountLabel: "Aantal ondertekenaars", signerNamesLabel: "Ondertekenaars",
+    validityLabel: "Geldigheid van het certificaat", properties: ["Laatst gewijzigd", "Auteur", "Aangemaakt", "Gewijzigd", "Toepassing", "PDF-producent", "Paginagrootte"],
+    newLabel: "Nieuw", allReleases: "Alle versies", versionLabel: "Versie", container: "P7M-container",
+    project: "Project", preview: "Voorbeeld van {name}", nestedSignatures: "Het bestand bevat te veel geneste handtekeningen",
+    signerUnknown: "Ondertekenaar onbekend", socialImageAlt: "P7M Reader. Open P7M-bestanden en pak de inhoud lokaal uit. Geen upload of account.",
+  },
+  pl: {
+    signatureInfo: "Informacje o podpisie", warningTitle: "Uwaga: podpis nie jest weryfikowany.",
+    warning: "P7M Reader wyodrębnia dokument i wyświetla czytelne dane certyfikatu. Nie weryfikuje integralności, unieważnienia, znaczników czasu ani ważności prawnej. Nie używaj tych informacji jako dowodu autentyczności.",
+    noPreview: "Podgląd jest niedostępny. Możesz pobrać wyodrębnioną zawartość.", demoError: "Nie udało się wczytać pliku demonstracyjnego",
+    invalid: "to nieprawidłowy lub uszkodzony plik P7M", noDocument: "podpis nie zawiera osadzonego dokumentu",
+    empty: "plik jest pusty", extension: "wybierz plik z rozszerzeniem .p7m",
+    opening: "Otwieranie {count} pliku…", openingMany: "Otwieranie {count} plików…",
+    failed: "Nie udało się otworzyć {count} pliku", failedMany: "Nie udało się otworzyć {count} plików",
+    signer: "podpisujący", signers: "podpisujący", noCertificate: "Brak czytelnego certyfikatu", unavailable: "Niedostępne",
+    viewer: "Przeglądarka P7M", results: "Wyodrębnione pliki", signerCountLabel: "Liczba podpisujących", signerNamesLabel: "Podpisujący",
+    validityLabel: "Ważność certyfikatu", properties: ["Ostatnia modyfikacja", "Autor", "Utworzono", "Zmodyfikowano", "Aplikacja", "Producent PDF", "Rozmiar strony"],
+    newLabel: "Nowość", allReleases: "Wszystkie wydania", versionLabel: "Wersja", container: "Kontener P7M",
+    project: "Projekt", preview: "Podgląd: {name}", nestedSignatures: "Plik zawiera zbyt wiele zagnieżdżonych podpisów",
+    signerUnknown: "Nieznany podpisujący", socialImageAlt: "P7M Reader. Otwieraj pliki P7M i wyodrębniaj ich zawartość lokalnie. Bez wysyłania i konta.",
+  },
+  uk: {
+    signatureInfo: "Відомості про підпис", warningTitle: "Увага: підпис не перевіряється.",
+    warning: "P7M Reader видобуває документ і показує читабельні дані сертифіката. Цілісність, відкликання, часові позначки та юридична чинність не перевіряються. Не використовуйте ці дані як доказ справжності.",
+    noPreview: "Попередній перегляд недоступний. Ви можете завантажити видобутий вміст.", demoError: "Не вдалося завантажити демонстраційний файл",
+    invalid: "це не схоже на справжній файл P7M або файл пошкоджено", noDocument: "підпис не містить вбудованого документа",
+    empty: "файл порожній", extension: "виберіть файл із розширенням .p7m",
+    opening: "Відкриваємо {count} файл…", openingMany: "Відкриваємо {count} файли…",
+    failed: "Не вдалося відкрити {count} файл", failedMany: "Не вдалося відкрити {count} файлів",
+    signer: "підписант", signers: "підписантів", noCertificate: "Немає читабельного сертифіката", unavailable: "Недоступно",
+    viewer: "Переглядач P7M", results: "Видобуті файли", signerCountLabel: "Кількість підписантів", signerNamesLabel: "Підписанти",
+    validityLabel: "Строк дії сертифіката", properties: ["Час останньої зміни", "Автор", "Створено", "Змінено", "Застосунок", "Виробник PDF", "Розмір сторінки"],
+    newLabel: "Нове", allReleases: "Усі версії", versionLabel: "Версія", container: "Контейнер P7M",
+    project: "Проєкт", preview: "Попередній перегляд: {name}", nestedSignatures: "Файл містить забагато вкладених підписів",
+    signerUnknown: "Підписанта не вказано", socialImageAlt: "P7M Reader. Відкривайте файли P7M і видобувайте вміст локально. Без завантаження на сервер і облікового запису.",
+  },
+  ru: {
+    signatureInfo: "Сведения о подписи", warningTitle: "Внимание: подпись не проверяется.",
+    warning: "P7M Reader извлекает документ и показывает читаемые данные сертификата. Целостность, отзыв, временные метки и юридическая действительность не проверяются. Не используйте эти сведения как доказательство подлинности.",
+    noPreview: "Предварительный просмотр недоступен. Вы можете скачать извлечённое содержимое.", demoError: "Не удалось загрузить демонстрационный файл",
+    invalid: "файл не похож на допустимый P7M или повреждён", noDocument: "подпись не содержит встроенного документа",
+    empty: "файл пуст", extension: "выберите файл с расширением .p7m",
+    opening: "Открываем {count} файл…", openingMany: "Открываем {count} файлов…",
+    failed: "Не удалось открыть {count} файл", failedMany: "Не удалось открыть {count} файлов",
+    signer: "подписант", signers: "подписанты", noCertificate: "Нет читаемого сертификата", unavailable: "Недоступно",
+    viewer: "Просмотр P7M", results: "Извлечённые файлы", signerCountLabel: "Количество подписантов", signerNamesLabel: "Подписанты",
+    validityLabel: "Срок действия сертификата", properties: ["Дата изменения", "Автор", "Создано", "Изменено", "Приложение", "Создатель PDF", "Размер страницы"],
+    newLabel: "Новое", allReleases: "Все версии", versionLabel: "Версия", container: "Контейнер P7M",
+    project: "Проект", preview: "Предварительный просмотр: {name}", nestedSignatures: "Файл содержит слишком много вложенных подписей",
+    signerUnknown: "Подписант не указан", socialImageAlt: "P7M Reader. Открывайте файлы P7M и извлекайте содержимое локально. Без загрузки на сервер и учётной записи.",
+  },
+};
+
+const withLocaleUi = (code: string, copy: Copy): Copy => ({
+  ...copy,
+  ...(localizedUi[code] ?? {}),
+  faqs: localizedFaqs[code] ? [...localizedFaqs[code], ...copy.faqs] : copy.faqs,
+});
+
 export const locales: Locale[] = [
   { code: "en", segment: "", slug: "", path: "/", name: "English", ogLocale: "en_US", copy: en },
-  { code: "de", segment: "de", slug: "p7m-datei-oeffnen", path: "/de/p7m-datei-oeffnen/", name: "Deutsch", ogLocale: "de_DE", copy: de },
-  { code: "pt-BR", segment: "pt-br", slug: "abrir-arquivo-p7m", path: "/pt-br/abrir-arquivo-p7m/", name: "Português (Brasil)", ogLocale: "pt_BR", copy: ptBR },
-  { code: "id", segment: "id", slug: "buka-file-p7m", path: "/id/buka-file-p7m/", name: "Bahasa Indonesia", ogLocale: "id_ID", copy: id },
-  { code: "vi", segment: "vi", slug: "mo-file-p7m", path: "/vi/mo-file-p7m/", name: "Tiếng Việt", ogLocale: "vi_VN", copy: vi },
-  { code: "es", segment: "es", slug: "abrir-archivo-p7m", path: "/es/abrir-archivo-p7m/", name: "Español", ogLocale: "es_ES", copy: es },
-  { code: "ja", segment: "ja", slug: "p7m-file-open", path: "/ja/p7m-file-open/", name: "日本語", ogLocale: "ja_JP", copy: ja },
+  { code: "de", segment: "de", slug: "p7m-datei-oeffnen", path: "/de/p7m-datei-oeffnen/", name: "Deutsch", ogLocale: "de_DE", copy: withLocaleUi("de", de) },
+  { code: "pt-BR", segment: "pt-br", slug: "abrir-arquivo-p7m", path: "/pt-br/abrir-arquivo-p7m/", name: "Português (Brasil)", ogLocale: "pt_BR", copy: withLocaleUi("pt-BR", ptBR) },
+  { code: "id", segment: "id", slug: "buka-file-p7m", path: "/id/buka-file-p7m/", name: "Bahasa Indonesia", ogLocale: "id_ID", copy: withLocaleUi("id", id) },
+  { code: "vi", segment: "vi", slug: "mo-file-p7m", path: "/vi/mo-file-p7m/", name: "Tiếng Việt", ogLocale: "vi_VN", copy: withLocaleUi("vi", vi) },
+  { code: "es", segment: "es", slug: "abrir-archivo-p7m", path: "/es/abrir-archivo-p7m/", name: "Español", ogLocale: "es_ES", copy: withLocaleUi("es", es) },
+  { code: "ja", segment: "ja", slug: "p7m-file-open", path: "/ja/p7m-file-open/", name: "日本語", ogLocale: "ja_JP", copy: withLocaleUi("ja", ja) },
   { code: "it", segment: "it", slug: "apri-file-p7m", path: "/it/apri-file-p7m/", name: "Italiano", ogLocale: "it_IT", copy: it },
-  { code: "pt-PT", segment: "pt", slug: "abrir-ficheiro-p7m", path: "/pt/abrir-ficheiro-p7m/", name: "Português", ogLocale: "pt_PT", copy: ptPT },
-  { code: "fr", segment: "fr", slug: "ouvrir-fichier-p7m", path: "/fr/ouvrir-fichier-p7m/", name: "Français", ogLocale: "fr_FR", copy: fr },
-  { code: "nl", segment: "nl", slug: "p7m-bestand-openen", path: "/nl/p7m-bestand-openen/", name: "Nederlands", ogLocale: "nl_NL", copy: nl },
-  { code: "pl", segment: "pl", slug: "otworz-plik-p7m", path: "/pl/otworz-plik-p7m/", name: "Polski", ogLocale: "pl_PL", copy: pl },
-  { code: "uk", segment: "uk", slug: "vidkryty-fail-p7m", path: "/uk/vidkryty-fail-p7m/", name: "Українська", ogLocale: "uk_UA", copy: uk },
-  { code: "ru", segment: "ru", slug: "otkryt-fail-p7m", path: "/ru/otkryt-fail-p7m/", name: "Русский", ogLocale: "ru_RU", copy: ru },
+  { code: "pt-PT", segment: "pt", slug: "abrir-ficheiro-p7m", path: "/pt/abrir-ficheiro-p7m/", name: "Português", ogLocale: "pt_PT", copy: withLocaleUi("pt-PT", ptPT) },
+  { code: "fr", segment: "fr", slug: "ouvrir-fichier-p7m", path: "/fr/ouvrir-fichier-p7m/", name: "Français", ogLocale: "fr_FR", copy: withLocaleUi("fr", fr) },
+  { code: "nl", segment: "nl", slug: "p7m-bestand-openen", path: "/nl/p7m-bestand-openen/", name: "Nederlands", ogLocale: "nl_NL", copy: withLocaleUi("nl", nl) },
+  { code: "pl", segment: "pl", slug: "otworz-plik-p7m", path: "/pl/otworz-plik-p7m/", name: "Polski", ogLocale: "pl_PL", copy: withLocaleUi("pl", pl) },
+  { code: "uk", segment: "uk", slug: "vidkryty-fail-p7m", path: "/uk/vidkryty-fail-p7m/", name: "Українська", ogLocale: "uk_UA", copy: withLocaleUi("uk", uk) },
+  { code: "ru", segment: "ru", slug: "otkryt-fail-p7m", path: "/ru/otkryt-fail-p7m/", name: "Русский", ogLocale: "ru_RU", copy: withLocaleUi("ru", ru) },
 ];
 
 export const defaultLocale = locales[0];
