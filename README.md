@@ -114,12 +114,14 @@ promettere la conversione di fatture in PDF.
 L'[audit del 4 ottobre 2026](docs/seo-audit-2026-10-04.md) contiene prove HTTP,
 matrice degli intenti, confronto con Excel to Markdown e piano Search Console
 e Bing a 28 e 56 giorni. Il controllo pubblico ha trovato HTTP senza redirect
-HTTPS e un errore TLS 525 sulla variante www: richiedono verifica e interventi
-autorizzati nella configurazione Cloudflare. Gli URL HTTPS principali funzionano.
+HTTPS e un errore TLS 525 sulla variante www. Dopo l’intervento dell’utente
+su Cloudflare, la verifica del 5 ottobre conferma redirect 301 verso HTTPS
+e da www al dominio principale, mantenendo percorso e query.
 L’integrazione Search Console documenta la canonical HTTP scelta per la pagina
 francese e la scarsa visibilità italiana, pur con indicizzazione confermata.
 Il report prepara la regola 301 e i controlli successivi. `pnpm check:https`
-resta separato dalla build e deve fallire finché il redirect pubblico manca.
+resta separato dalla build e passa dopo l’intervento Cloudflare. La canonical
+selezionata da Google va ricontrollata dopo una nuova scansione.
 
 Le anteprime usano PNG pubblici da 1200×630 pixel, con una variante italiana e
 una inglese. Per rigenerare immagini e sorgenti SVG dopo un cambio al layout:

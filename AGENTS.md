@@ -117,14 +117,18 @@ Current product state:
   with Accept: text/markdown. The sitemap contains only the 14 canonical tools.
 - The public audit on 2026-10-04 found HTTP returning 200 without an HTTPS
   redirect and www returning TLS error 525. Documented in
-  `docs/seo-audit-2026-10-04.md`; these need authorized edge/DNS/TLS checks.
+  `docs/seo-audit-2026-10-04.md`. On 2026-10-05 public checks confirmed
+  both corrections after the user applied the Cloudflare settings: all 14
+  HTTP pages redirect 301 to HTTPS, and www redirects to the apex with
+  paths and query strings preserved. Missing destinations retain HTTPS 404.
   Do not claim they are fixed by the local build or change training policy
   while improving search access. Read-only Search Console evidence received on
   2026-10-04 confirms FR HTTP indexed with Google canonical HTTP, despite the
   HTTPS user canonical. IT is indexed but has weak observed query visibility.
   Prioritize the edge HTTPS redirect, then existing IT instructions/examples.
   `pnpm check:https` checks public redirects without credentials or mutations;
-  it intentionally fails until the authorized Cloudflare change is applied.
+  it now passes. Recheck FR HTTP/HTTPS via URL Inspection after Google recrawls;
+  working redirects do not prove the indexed canonical has already changed.
   Do not run Hermes weekly recaps or change Hermes to refresh these data.
 - FAQ answers remain in static HTML inside native details elements. Collapsed
   FAQs keep the desktop sidebar within 1440×900; expanding answers may scroll.
@@ -150,8 +154,8 @@ Current product state:
   user-selected files.
 - Release `v1.4.3` was published and deployed on 2026-10-04 from `f57e52f`;
   CI and live checks confirmed all 14 routes, social PNGs and custom 404.
-  HTTP still returns 200 and www still returns 525; the release does not
-  apply the prepared Cloudflare redirect. Python urllib UA received 403/1010;
+  The user applied edge redirects separately on 2026-10-05, confirmed live;
+  keep that intervention date separate from the code deploy. Python urllib UA received 403/1010;
   curl and the tested search/social UA strings received 200. Check account
   rules only with separate authorization; UA checks do not prove real bot IP access.
 - Release 1.4.3 refreshes the offline cache to `p7m-reader-v10` so the new
